@@ -129,7 +129,69 @@ function seedCompanyInfo() {
   }
 }
 
+function seedServices() {
+  const count = db.prepare('SELECT COUNT(*) as count FROM services').get().count;
+  if (count > 0) return;
+
+  const services = [
+    {
+      title: 'Business Intelligence',
+      description: 'Tableaux de bord et visualisation de données pour une prise de décision éclairée. Nous concevons des dashboards interactifs avec Power BI, Tableau et d\'autres outils BI pour transformer vos données en insights stratégiques.',
+      icon: 'FiBarChart2',
+      link: '',
+      display_order: 1
+    },
+    {
+      title: 'Formation & Compétences',
+      description: 'Formation de vos équipes sur les outils d\'analyse et de collecte de données : Power BI, SQL, Excel avancé, et bien plus. Programmes personnalisés adaptés à votre niveau et vos besoins métier.',
+      icon: 'FiBookOpen',
+      link: '',
+      display_order: 2
+    },
+    {
+      title: 'Création de Sites Web',
+      description: 'Développement de sites web professionnels et d\'applications SaaS sur mesure. Sites vitrines, e-commerce, plateformes SaaS — nous créons votre présence numérique avec les technologies modernes.',
+      icon: 'FiCode',
+      link: '',
+      display_order: 3
+    }
+  ];
+
+  const stmt = db.prepare(
+    'INSERT INTO services (title, description, icon, link, display_order, active) VALUES (?, ?, ?, ?, ?, 1)'
+  );
+  for (const s of services) {
+    stmt.run(s.title, s.description, s.icon, s.link, s.display_order);
+  }
+  console.log('Services seeded');
+}
+
+function seedFutureProjects() {
+  const count = db.prepare('SELECT COUNT(*) as count FROM future_projects').get().count;
+  if (count > 0) return;
+
+  const projects = [
+    {
+      title: 'Recherche sur les Robots Humanoïdes',
+      description: 'Programme de recherche dédié au développement de robots humanoïdes intelligents. Exploration de l\'IA conversationnelle, de la vision par ordinateur, de la locomotion bipède et de l\'interaction homme-robot pour des applications en service, santé et industrie.',
+      expected_date: 'En cours - Phase exploratoire',
+      link: '',
+      display_order: 1
+    }
+  ];
+
+  const stmt = db.prepare(
+    'INSERT INTO future_projects (title, description, expected_date, link, display_order, active) VALUES (?, ?, ?, ?, ?, 1)'
+  );
+  for (const p of projects) {
+    stmt.run(p.title, p.description, p.expected_date, p.link, p.display_order);
+  }
+  console.log('Future projects seeded');
+}
+
 seedAdmin();
 seedCompanyInfo();
+seedServices();
+seedFutureProjects();
 
 export default db;
