@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ research.title|default:"Recherche" }} — Minimum Tech{% endblock %}
+
+{% block content %}
+<div class="mesh-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div></div>
+
+<div class="page-hero">
+  <div class="section-label" style="margin-bottom:16px"><i class="ri-microscope-line"></i> Programme de Recherche</div>
+  <h1>{{ research.title|default:"Recherche sur les Robots Humanoïdes" }}</h1>
+  {% if research.subtitle %}<p>{{ research.subtitle }}</p>{% endif %}
+</div>
+
+{% if research %}
+<section class="section">
+  <div class="container" style="max-width:900px">
+
+    <div class="research-card animate delay-1" style="margin-bottom:24px">
+      <div class="research-card-label"><i class="ri-focus-3-line"></i> Contexte</div>
+      <h4>Contexte de la recherche</h4>
+      <p style="margin-top:8px">{{ research.context }}</p>
+    </div>
+
+    <div class="research-card animate delay-2" style="margin-bottom:24px">
+      <div class="research-card-label"><i class="ri-flag-line"></i> Objectif</div>
+      <h4>But de la recherche</h4>
+      <p style="margin-top:8px">{{ research.goal }}</p>
+    </div>
+
+    <div class="research-card animate delay-3" style="margin-bottom:24px">
+      <div class="research-card-label"><i class="ri-pulse-line"></i> État actuel</div>
+      <h4>Où en sommes-nous ?</h4>
+      <p style="margin-top:8px">{{ research.current_state }}</p>
+    </div>
+
+    {% if research.results %}
+    <div class="research-card animate delay-3" style="margin-bottom:24px">
+      <div class="research-card-label"><i class="ri-trophy-line"></i> Résultats</div>
+      <h4>Résultats obtenus</h4>
+      <p style="margin-top:8px">{{ research.results }}</p>
+    </div>
+    {% endif %}
+
+    {% if research.improvements %}
+    <div class="research-card animate delay-3" style="margin-bottom:24px">
+      <div class="research-card-label"><i class="ri-rocket-line"></i> Améliorations</div>
+      <h4>Pistes d'amélioration</h4>
+      <p style="margin-top:8px">{{ research.improvements }}</p>
+    </div>
+    {% endif %}
+
+    {% if research.link %}
+    <a href="{{ research.link }}" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:16px">
+      <i class="ri-external-link-line"></i> Voir plus
+    </a>
+    {% endif %}
+
+    <div style="margin-top:40px">
+      <a href="/" class="card-link"><i class="ri-arrow-left-line"></i> Retour à l'accueil</a>
+    </div>
+
+  </div>
+</section>
+{% endif %}
+{% endblock %}

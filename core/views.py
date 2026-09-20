@@ -60,6 +60,14 @@ def futurs_projets_page(request):
     return render(request, 'core/futurs_projets.html', context)
 
 
+def research_page(request):
+    context = {
+        'research': ResearchProject.objects.filter(active=True).first(),
+        'company': get_company_info(),
+    }
+    return render(request, 'core/research.html', context)
+
+
 def blog_page(request):
     context = {
         'posts': BlogPost.objects.filter(published=True),

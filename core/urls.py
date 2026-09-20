@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import RedirectView
 from . import views
 
 urlpatterns = [
@@ -6,9 +7,13 @@ urlpatterns = [
     path('services/', views.services_page, name='services'),
     path('realisations/', views.realisations_page, name='realisations'),
     path('futurs-projets/', views.futurs_projets_page, name='futurs_projets'),
+    path('recherche/', views.research_page, name='research'),
     path('blog/', views.blog_page, name='blog'),
     path('blog/<int:pk>/', views.blog_post_page, name='blog_post'),
     path('contact/', views.contact_page, name='contact'),
+    # Login shortcut
+    path('login/', RedirectView.as_view(url='/admin-panel/login/', permanent=False)),
+    path('login', RedirectView.as_view(url='/admin-panel/login/', permanent=False)),
     # Admin
     path('admin-panel/login/', views.admin_login, name='admin_login'),
     path('admin-panel/logout/', views.admin_logout, name='admin_logout'),

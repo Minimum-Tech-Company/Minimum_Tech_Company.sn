@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script>
+      (function(){
+        var t = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
 </head>
 <body>
     <nav class="nav" id="nav">
@@ -21,13 +27,18 @@
                 <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Accueil</a></li>
                 <li><a href="/services/" class="{% if request.path == '/services/' %}active{% endif %}">Services</a></li>
                 <li><a href="/realisations/" class="{% if request.path == '/realisations/' %}active{% endif %}">Réalisations</a></li>
-                <li><a href="/futurs-projets/" class="{% if request.path == '/futurs-projets/' %}active{% endif %}">Projets</a></li>
+                <li><a href="/recherche/" class="{% if request.path == '/recherche/' %}active{% endif %}">Recherche</a></li>
                 <li><a href="/blog/" class="{% if request.path == '/blog/' %}active{% endif %}">Blog</a></li>
                 <li><a href="/contact/" class="{% if request.path == '/contact/' %}active{% endif %}">Contact</a></li>
             </ul>
-            <button class="nav-toggle" id="navToggle" aria-label="Menu">
-                <span></span><span></span><span></span>
-            </button>
+            <div style="display:flex;align-items:center;gap:8px">
+              <button class="theme-toggle" id="themeToggle" aria-label="Changer de theme">
+                <i class="ri-sun-line" id="themeIcon"></i>
+              </button>
+              <button class="nav-toggle" id="navToggle" aria-label="Menu">
+                  <span></span><span></span><span></span>
+              </button>
+            </div>
         </div>
     </nav>
 
@@ -52,8 +63,8 @@
                 <div class="footer-col">
                     <h4>Navigation</h4>
                     <a href="/services/">Services</a>
-                    <a href="/realisations/">Réalisations</a>
-                    <a href="/futurs-projets/">Projets futurs</a>
+                    <a href="/realisations/">Realisations</a>
+                    <a href="/recherche/">Recherche</a>
                     <a href="/blog/">Blog</a>
                 </div>
                 <div class="footer-col">
@@ -64,12 +75,33 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>{{ company.footer_text|default:"© 2025 Minimum Tech. Tous droits réservés." }}</p>
+                <p>{{ company.footer_text|default:"2025 Minimum Tech. Tous droits reserves." }}</p>
             </div>
         </div>
     </footer>
 
     <script src="{% static 'js/main.js' %}"></script>
-    {% block scripts %}{% endblock %}
+    <script>
+      (function(){
+        var toggle = document.getElementById('themeToggle');
+        var icon = document.getElementById('themeIcon');
+        var html = document.documentElement;
+
+        function updateIcon(){
+          var t = html.getAttribute('data-theme');
+          icon.className = t === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
+        }
+
+        updateIcon();
+
+        toggle.addEventListener('click', function(){
+          var current = html.getAttribute('data-theme');
+          var next = current === 'dark' ? 'light' : 'dark';
+          html.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+          updateIcon();
+        });
+      })();
+    </script>
 </body>
 </html>

@@ -1,12 +1,18 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion — Admin MinTech</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
 </head>
 <body>
   <div class="login-page">
@@ -17,13 +23,33 @@
       </a>
       <p class="subtitle">Panel d'administration</p>
       {% if messages %}{% for msg in messages %}<div class="alert alert-error"><i class="ri-error-warning-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
-      <form method="post">
+      <form method="post" action="">
         {% csrf_token %}
-        <div class="form-group"><label><i class="ri-user-line"></i> Identifiant</label><input type="text" name="username" required placeholder="Nom d'utilisateur"></div>
-        <div class="form-group"><label><i class="ri-lock-line"></i> Mot de passe</label><input type="password" name="password" required placeholder="••••••••"></div>
+        <div class="form-group"><label><i class="ri-user-line"></i> Identifiant</label><input type="text" name="username" required placeholder="Nom d'utilisateur" autofocus></div>
+        <div class="form-group"><label><i class="ri-lock-line"></i> Mot de passe</label><input type="password" name="password" required placeholder="Mot de passe"></div>
         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center"><i class="ri-login-box-line"></i> Se connecter</button>
       </form>
+      <div style="text-align:center;margin-top:24px">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Changer de theme" style="margin:0 auto">
+          <i class="ri-sun-line" id="loginThemeIcon"></i>
+        </button>
+      </div>
     </div>
   </div>
+  <script>
+    var icon = document.getElementById('loginThemeIcon');
+    function updateIcon(){
+      var t = document.documentElement.getAttribute('data-theme');
+      icon.className = t === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
+    }
+    updateIcon();
+    function toggleTheme(){
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateIcon();
+    }
+  </script>
 </body>
 </html>

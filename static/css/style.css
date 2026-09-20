@@ -26,6 +26,22 @@
   --glass-border: 1px solid rgba(255,255,255,0.08);
 }
 
+[data-theme="light"] {
+  --c-bg: #f5f5f7;
+  --c-bg2: #ffffff;
+  --c-surface: rgba(0,0,0,0.02);
+  --c-surface2: rgba(0,0,0,0.05);
+  --c-border: rgba(0,0,0,0.08);
+  --c-text: #1a1a2e;
+  --c-text2: #555570;
+  --c-accent: #6c5ce7;
+  --c-accent2: #0097a7;
+  --c-accent3: #e84393;
+  --shadow: 0 8px 32px rgba(0,0,0,0.08);
+  --glass: rgba(255,255,255,0.7);
+  --glass-border: 1px solid rgba(0,0,0,0.08);
+}
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
@@ -818,8 +834,40 @@ body {
 .delay-2 { animation-delay: 0.2s; }
 .delay-3 { animation-delay: 0.3s; }
 
-/* EMPTY STATE */
-.empty-state {
-  text-align: center; padding: 60px 24px; color: var(--c-text2);
-}
+.empty-state { text-align: center; padding: 60px 24px; color: var(--c-text2); }
 .empty-state i { font-size: 3rem; margin-bottom: 16px; display: block; }
+
+/* ============ THEME TOGGLE ============ */
+.theme-toggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--c-surface2);
+  border: var(--glass-border);
+  color: var(--c-text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  background: var(--c-surface);
+  transform: scale(1.05);
+}
+
+/* ============ LIGHT THEME OVERRIDES ============ */
+[data-theme="light"] .mesh-bg .blob { opacity: 0.12; }
+[data-theme="light"] .hero::before { opacity: 0.5; }
+[data-theme="light"] .nav.scrolled { background: rgba(245,245,247,0.9); }
+[data-theme="light"] .hero-card::before { opacity: 0.15; }
+[data-theme="light"] .research-card:hover { border-color: rgba(108,92,231,0.2); }
+[data-theme="light"] .card:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+[data-theme="light"] .cta-box::before { opacity: 0.05; }
+[data-theme="light"] .modal { background: var(--c-bg2); }
+[data-theme="light"] .admin-sidebar { background: var(--c-bg2); }
+[data-theme="light"] .login-card { background: var(--glass); }
+[data-theme="light"] .blog-article { background: var(--glass); }
+[data-theme="light"] .contact-info-card { background: var(--glass); }

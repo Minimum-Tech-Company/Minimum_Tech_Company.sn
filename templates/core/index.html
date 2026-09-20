@@ -9,7 +9,7 @@
   <div class="blob blob-3"></div>
 </div>
 
-<section class="hero" style="background: url('/media/photos/hero-bg.jpg') center/cover no-repeat; position: relative;">
+<section class="hero" style="background: url('/media/photos/inside.png') center/cover no-repeat; position: relative;">
   <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,6,10,0.88),rgba(6,6,10,0.75));pointer-events:none"></div>
   <div class="hero-inner">
     <div>
@@ -83,36 +83,14 @@
         <h2>{{ research.title }}</h2>
         {% if research.subtitle %}<p>{{ research.subtitle }}</p>{% endif %}
       </div>
-      <div class="research-cards">
+      <div>
         <div class="research-card animate delay-1">
-          <div class="research-card-label"><i class="ri-focus-3-line"></i> Contexte</div>
-          <h4>Contexte de la recherche</h4>
-          <p>{{ research.context }}</p>
-        </div>
-        <div class="research-card animate delay-2">
-          <div class="research-card-label"><i class="ri-flag-line"></i> Objectif</div>
-          <h4>But de la recherche</h4>
-          <p>{{ research.goal }}</p>
-        </div>
-        <div class="research-card animate delay-3">
           <div class="research-card-label"><i class="ri-pulse-line"></i> État actuel</div>
-          <h4>Où en sommes-nous ?</h4>
-          <p>{{ research.current_state }}</p>
+          <p>{{ research.current_state|truncatewords:20 }}</p>
         </div>
-        {% if research.results %}
-        <div class="research-card animate delay-3">
-          <div class="research-card-label"><i class="ri-trophy-line"></i> Résultats</div>
-          <h4>Résultats obtenus</h4>
-          <p>{{ research.results }}</p>
-        </div>
-        {% endif %}
-        {% if research.improvements %}
-        <div class="research-card animate delay-3">
-          <div class="research-card-label"><i class="ri-rocket-line"></i> Améliorations</div>
-          <h4>Pistes d'amélioration</h4>
-          <p>{{ research.improvements }}</p>
-        </div>
-        {% endif %}
+        <a href="/recherche/" class="btn btn-primary" style="margin-top:20px">
+          En savoir plus <i class="ri-arrow-right-line"></i>
+        </a>
       </div>
     </div>
   </div>
