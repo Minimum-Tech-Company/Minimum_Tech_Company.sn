@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Minimum Tech{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <span class="logo-icon"><i class="ri-code-s-slash-line"></i></span>
+                <span class="logo-text">Min<span class="accent">Tech</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Accueil</a></li>
+                <li><a href="/services/" class="{% if request.path == '/services/' %}active{% endif %}">Services</a></li>
+                <li><a href="/realisations/" class="{% if request.path == '/realisations/' %}active{% endif %}">Réalisations</a></li>
+                <li><a href="/futurs-projets/" class="{% if request.path == '/futurs-projets/' %}active{% endif %}">Projets</a></li>
+                <li><a href="/blog/" class="{% if request.path == '/blog/' %}active{% endif %}">Blog</a></li>
+                <li><a href="/contact/" class="{% if request.path == '/contact/' %}active{% endif %}">Contact</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+        <div class="footer-glow"></div>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="nav-logo">
+                        <span class="logo-icon"><i class="ri-code-s-slash-line"></i></span>
+                        <span class="logo-text">Min<span class="accent">Tech</span></span>
+                    </a>
+                    <p class="footer-desc">{{ company.company_description|default:"Solutions technologiques innovantes pour propulser votre entreprise." }}</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="ri-linkedin-fill"></i></a>
+                        <a href="#"><i class="ri-github-fill"></i></a>
+                        <a href="#"><i class="ri-twitter-x-fill"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <a href="/services/">Services</a>
+                    <a href="/realisations/">Réalisations</a>
+                    <a href="/futurs-projets/">Projets futurs</a>
+                    <a href="/blog/">Blog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <a href="mailto:{{ company.company_email|default:'contact@minimumtech.com' }}"><i class="ri-mail-line"></i> {{ company.company_email|default:"contact@minimumtech.com" }}</a>
+                    <a href="tel:{{ company.company_phone|default:'+243000000000' }}"><i class="ri-phone-line"></i> {{ company.company_phone|default:"+243 000 000 000" }}</a>
+                    <p><i class="ri-map-pin-line"></i> {{ company.company_address|default:"Kinshasa, RDC" }}</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>{{ company.footer_text|default:"© 2025 Minimum Tech. Tous droits réservés." }}</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

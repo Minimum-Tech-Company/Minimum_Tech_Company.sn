@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard — Admin MinTech{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-logo"><a href="/" class="nav-logo"><span class="logo-icon"><i class="ri-code-s-slash-line"></i></span><span class="logo-text">Min<span class="accent">Tech</span></span></a></div>
+    <nav class="admin-nav">
+      <a href="/admin-panel/" class="active"><i class="ri-dashboard-line"></i> Dashboard</a>
+      <a href="/admin-panel/services/"><i class="ri-service-line"></i> Services</a>
+      <a href="/admin-panel/projects/"><i class="ri-folder-line"></i> Réalisations</a>
+      <a href="/admin-panel/future-projects/"><i class="ri-time-line"></i> Projets futurs</a>
+      <a href="/admin-panel/research/"><i class="ri-microscope-line"></i> Recherche</a>
+      <a href="/admin-panel/blog/"><i class="ri-article-line"></i> Blog</a>
+      <a href="/admin-panel/hero/"><i class="ri-image-line"></i> Hero</a>
+      <a href="/admin-panel/company/"><i class="ri-settings-line"></i> Entreprise</a>
+      <a href="/admin-panel/messages/"><i class="ri-message-3-line"></i> Messages {% if unread_messages %}<span style="background:var(--c-accent3);color:white;padding:2px 8px;border-radius:10px;font-size:0.75rem">{{ unread_messages }}</span>{% endif %}</a>
+      <a href="/" target="_blank"><i class="ri-global-line"></i> Voir le site</a>
+    </nav>
+    <div style="padding:24px;border-top:var(--glass-border);margin-top:auto">
+      <p style="font-size:0.8rem;color:var(--c-text2);margin-bottom:8px">{{ user.email }}</p>
+      <a href="/admin-panel/logout/" class="btn btn-danger btn-sm" style="width:100%;justify-content:center"><i class="ri-logout-box-line"></i> Déconnexion</a>
+    </div>
+  </aside>
+  <main class="admin-content">
+    <button class="nav-toggle" style="position:fixed;top:16px;left:16px;z-index:101;background:var(--c-surface2);padding:10px;border-radius:10px;border:var(--glass-border)" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="ri-menu-line" style="color:var(--c-text)"></i></button>
+    <div class="admin-header"><h1>Tableau de bord</h1></div>
+    <div class="admin-stats">
+      <div class="admin-stat"><h3>Services</h3><div class="number">{{ services_count }}</div></div>
+      <div class="admin-stat"><h3>Réalisations</h3><div class="number">{{ projects_count }}</div></div>
+      <div class="admin-stat"><h3>Projets futurs</h3><div class="number">{{ future_projects_count }}</div></div>
+      <div class="admin-stat"><h3>Articles blog</h3><div class="number">{{ blog_count }}</div></div>
+      <div class="admin-stat"><h3>Messages</h3><div class="number">{{ messages_count }}</div></div>
+      <div class="admin-stat"><h3>Non lus</h3><div class="number" style="background:var(--c-gradient2);-webkit-background-clip:text;-webkit-text-fill-color:transparent">{{ unread_messages }}</div></div>
+    </div>
+    <div class="card" style="padding:32px">
+      <h2 style="font-family:var(--font-display);font-size:1.25rem;margin-bottom:16px">Bienvenue, {{ user.username }} !</h2>
+      <p style="color:var(--c-text2);line-height:1.7">Utilisez le menu latéral pour gérer le contenu de votre site. Ajoutez, modifiez ou supprimez des services, projets, articles de blog, et bien plus encore.</p>
+    </div>
+  </main>
+</div>
+{% endblock %}

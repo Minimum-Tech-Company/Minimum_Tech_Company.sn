@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Blog — Minimum Tech{% endblock %}
+{% block content %}
+<div class="mesh-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+<div class="page-hero">
+  <h1>Blog & Recherches</h1>
+  <p>Explorez nos articles sur les dernières innovations technologiques</p>
+</div>
+<section class="section">
+  <div class="container">
+    <div class="blog-list">
+      {% for post in posts %}
+      <div class="blog-card animate delay-{{ forloop.counter }}">
+        <div class="blog-meta">
+          <span><i class="ri-calendar-line"></i> {{ post.created_at|date:"d/m/Y" }}</span>
+          {% if post.tags %}<span><i class="ri-hashtag"></i> {{ post.tags }}</span>{% endif %}
+        </div>
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.excerpt|default:post.content|truncatewords:30 }}</p>
+        <div style="display:flex;gap:12px;margin-top:12px">
+          <a href="/blog/{{ post.id }}/" class="card-link">Lire l'article <i class="ri-arrow-right-line"></i></a>
+          {% if post.link %}
+          <a href="{{ post.link }}" target="_blank" rel="noopener" class="card-link" style="color:var(--c-accent3)">Source externe <i class="ri-external-link-line"></i></a>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-state"><i class="ri-article-line"></i><p>Aucun article pour le moment.</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

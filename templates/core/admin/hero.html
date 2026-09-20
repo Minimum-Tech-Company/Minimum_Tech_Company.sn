@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Hero — Admin MinTech{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-logo"><a href="/" class="nav-logo"><span class="logo-icon"><i class="ri-code-s-slash-line"></i></span><span class="logo-text">Min<span class="accent">Tech</span></span></a></div>
+    <nav class="admin-nav">
+      <a href="/admin-panel/"><i class="ri-dashboard-line"></i> Dashboard</a>
+      <a href="/admin-panel/services/"><i class="ri-service-line"></i> Services</a>
+      <a href="/admin-panel/projects/"><i class="ri-folder-line"></i> Réalisations</a>
+      <a href="/admin-panel/future-projects/"><i class="ri-time-line"></i> Projets futurs</a>
+      <a href="/admin-panel/research/"><i class="ri-microscope-line"></i> Recherche</a>
+      <a href="/admin-panel/blog/"><i class="ri-article-line"></i> Blog</a>
+      <a href="/admin-panel/hero/" class="active"><i class="ri-image-line"></i> Hero</a>
+      <a href="/admin-panel/company/"><i class="ri-settings-line"></i> Entreprise</a>
+      <a href="/admin-panel/messages/"><i class="ri-message-3-line"></i> Messages</a>
+    </nav>
+  </aside>
+  <main class="admin-content">
+    <div class="admin-header">
+      <h1>Bannière Hero</h1>
+      <button class="btn btn-primary" onclick="document.getElementById('modal').style.display='flex'"><i class="ri-add-line"></i> Ajouter</button>
+    </div>
+    {% if messages %}{% for msg in messages %}<div class="alert alert-success"><i class="ri-check-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
+    <div class="admin-table">
+      <table>
+        <thead><tr><th>Titre</th><th>Sous-titre</th><th>CTA</th><th>Actif</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for h in heroes %}
+          <tr>
+            <td style="font-weight:600">{{ h.title }}</td>
+            <td>{{ h.subtitle|default:"—" }}</td>
+            <td>{{ h.cta_text }}</td>
+            <td>{% if h.active %}✅{% else %}❌{% endif %}</td>
+            <td>
+              <div class="admin-actions">
+                <button class="btn btn-sm btn-ghost" onclick="editHero({{ h.id }},'{{ h.title|escapejs }}','{{ h.subtitle|default:''|escapejs }}','{{ h.description|default:''|escapejs }}','{{ h.cta_text|escapejs }}','{{ h.cta_link|escapejs }}',{% if h.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
+                <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ h.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer ?')"><i class="ri-delete-bin-line"></i></button></form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-overlay" id="modal" style="display:none">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header"><h2>Ajouter un Hero</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
+        <form method="post">
+          {% csrf_token %}
+          <div class="modal-body">
+            <input type="hidden" name="action" value="create">
+            <div class="form-group"><label>Titre</label><input type="text" name="title" required></div>
+            <div class="form-group"><label>Sous-titre</label><input type="text" name="subtitle"></div>
+            <div class="form-group"><label>Description</label><textarea name="description"></textarea></div>
+            <div class="form-group"><label>Texte du bouton</label><input type="text" name="cta_text" value="Découvrir"></div>
+            <div class="form-group"><label>Lien du bouton</label><input type="text" name="cta_link" value="/services/"></div>
+            <div class="form-group"><label><input type="checkbox" name="active"> Actif</label></div>
+          </div>
+          <div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="document.getElementById('modal').style.display='none'">Annuler</button><button type="submit" class="btn btn-primary">Créer</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-overlay" id="editModal" style="display:none">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header"><h2>Modifier le Hero</h2><button class="modal-close" onclick="document.getElementById('editModal').style.display='none'">&times;</button></div>
+        <form method="post">
+          {% csrf_token %}
+          <div class="modal-body">
+            <input type="hidden" name="action" value="update">
+            <input type="hidden" name="id" id="edit_id">
+            <div class="form-group"><label>Titre</label><input type="text" name="title" id="edit_title" required></div>
+            <div class="form-group"><label>Sous-titre</label><input type="text" name="subtitle" id="edit_subtitle"></div>
+            <div class="form-group"><label>Description</label><textarea name="description" id="edit_desc"></textarea></div>
+            <div class="form-group"><label>Texte du bouton</label><input type="text" name="cta_text" id="edit_cta_text"></div>
+            <div class="form-group"><label>Lien du bouton</label><input type="text" name="cta_link" id="edit_cta_link"></div>
+            <div class="form-group"><label><input type="checkbox" name="active" id="edit_active" checked> Actif</label></div>
+          </div>
+          <div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="document.getElementById('editModal').style.display='none'">Annuler</button><button type="submit" class="btn btn-primary">Modifier</button></div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+function editHero(id,title,subtitle,desc,cta_text,cta_link,active){
+  document.getElementById('edit_id').value=id;
+  document.getElementById('edit_title').value=title;
+  document.getElementById('edit_subtitle').value=subtitle;
+  document.getElementById('edit_desc').value=desc;
+  document.getElementById('edit_cta_text').value=cta_text;
+  document.getElementById('edit_cta_link').value=cta_link;
+  document.getElementById('edit_active').checked=active==1;
+  document.getElementById('editModal').style.display='flex';
+}
+</script>
+{% endblock %}

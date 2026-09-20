@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Entreprise — Admin MinTech{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-logo"><a href="/" class="nav-logo"><span class="logo-icon"><i class="ri-code-s-slash-line"></i></span><span class="logo-text">Min<span class="accent">Tech</span></span></a></div>
+    <nav class="admin-nav">
+      <a href="/admin-panel/"><i class="ri-dashboard-line"></i> Dashboard</a>
+      <a href="/admin-panel/services/"><i class="ri-service-line"></i> Services</a>
+      <a href="/admin-panel/projects/"><i class="ri-folder-line"></i> Réalisations</a>
+      <a href="/admin-panel/future-projects/"><i class="ri-time-line"></i> Projets futurs</a>
+      <a href="/admin-panel/research/"><i class="ri-microscope-line"></i> Recherche</a>
+      <a href="/admin-panel/blog/"><i class="ri-article-line"></i> Blog</a>
+      <a href="/admin-panel/hero/"><i class="ri-image-line"></i> Hero</a>
+      <a href="/admin-panel/company/" class="active"><i class="ri-settings-line"></i> Entreprise</a>
+      <a href="/admin-panel/messages/"><i class="ri-message-3-line"></i> Messages</a>
+    </nav>
+  </aside>
+  <main class="admin-content">
+    <div class="admin-header">
+      <h1>Informations de l'entreprise</h1>
+    </div>
+    {% if messages %}{% for msg in messages %}<div class="alert alert-success"><i class="ri-check-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
+    <div class="card" style="padding:32px">
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Nom de l'entreprise</label>
+          <input type="text" name="company_name" value="{% for info in infos %}{% if info.key == 'company_name' %}{{ info.value }}{% endif %}{% endfor %}">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="company_description" rows="3">{% for info in infos %}{% if info.key == 'company_description' %}{{ info.value }}{% endif %}{% endfor %}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="company_email" value="{% for info in infos %}{% if info.key == 'company_email' %}{{ info.value }}{% endif %}{% endfor %}">
+        </div>
+        <div class="form-group">
+          <label>Téléphone</label>
+          <input type="text" name="company_phone" value="{% for info in infos %}{% if info.key == 'company_phone' %}{{ info.value }}{% endif %}{% endfor %}">
+        </div>
+        <div class="form-group">
+          <label>Adresse</label>
+          <input type="text" name="company_address" value="{% for info in infos %}{% if info.key == 'company_address' %}{{ info.value }}{% endif %}{% endfor %}">
+        </div>
+        <div class="form-group">
+          <label>Texte du footer</label>
+          <input type="text" name="footer_text" value="{% for info in infos %}{% if info.key == 'footer_text' %}{{ info.value }}{% endif %}{% endfor %}">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="ri-save-line"></i> Enregistrer</button>
+      </form>
+    </div>
+  </main>
+</div>
+{% endblock %}

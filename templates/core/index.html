@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static split_tags %}
+{% block title %}Minimum Tech — Solutions Technologiques{% endblock %}
+
+{% block content %}
+<div class="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<section class="hero" style="background: url('/media/photos/hero-bg.jpg') center/cover no-repeat; position: relative;">
+  <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,6,10,0.88),rgba(6,6,10,0.75));pointer-events:none"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge animate"><span class="dot"></span> Innovation Technologique</div>
+      <h1 class="animate delay-1">
+        {% if hero %}{{ hero.title }}{% else %}Transformez votre vision en{% endif %}
+        <br><span class="gradient">{% if hero %}{{ hero.subtitle }}{% else %}réalité numérique{% endif %}</span>
+      </h1>
+      <p class="hero-desc animate delay-2">
+        {{ hero.description|default:company.company_description|default:"Nous concevons des solutions numériques sur mesure pour propulser votre entreprise vers le succès." }}
+      </p>
+      <div class="hero-actions animate delay-3">
+        <a href="{{ hero.cta_link|default:'/services/' }}" class="btn btn-primary">
+          {{ hero.cta_text|default:"Découvrir nos services" }} <i class="ri-arrow-right-line"></i>
+        </a>
+        <a href="/contact/" class="btn btn-ghost">Nous contacter</a>
+      </div>
+    </div>
+    <div class="hero-visual animate delay-2">
+      <div class="hero-card">
+        <div class="hero-card-icon"><i class="ri-robot-line"></i></div>
+        <h3>Minimum Tech</h3>
+        <p>Data • Formation • Développement • Recherche</p>
+        <div class="tech-stack">
+          <span class="tech-tag">Power BI</span>
+          <span class="tech-tag">SQL</span>
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Django</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label"><i class="ri-service-line"></i> Nos Services</div>
+      <h2 class="section-title">Des solutions sur mesure</h2>
+      <p class="section-desc">Des prestations complètes pour répondre à tous vos besoins technologiques</p>
+    </div>
+    <div class="card-grid">
+      {% for service in services %}
+      <div class="card animate delay-{{ forloop.counter }}">
+        <div class="card-icon{% if forloop.counter == 2 %} pink{% endif %}{% if forloop.counter == 3 %} teal{% endif %}">
+          <i class="{{ service.icon }}"></i>
+        </div>
+        <span class="tag" style="margin-bottom:12px;display:inline-block">{{ service.get_category_display }}</span>
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.description }}</p>
+        {% if service.link %}
+        <a href="{{ service.link }}" target="_blank" rel="noopener" class="card-link">En savoir plus <i class="ri-arrow-right-line"></i></a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% if services %}
+    <div style="text-align:center;margin-top:48px">
+      <a href="/services/" class="btn btn-outline">Voir tous les services <i class="ri-arrow-right-line"></i></a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if research %}
+<section class="section research-section">
+  <div class="container">
+    <div class="research-grid">
+      <div class="research-header">
+        <div class="section-label"><i class="ri-microscope-line"></i> Recherche</div>
+        <h2>{{ research.title }}</h2>
+        {% if research.subtitle %}<p>{{ research.subtitle }}</p>{% endif %}
+      </div>
+      <div class="research-cards">
+        <div class="research-card animate delay-1">
+          <div class="research-card-label"><i class="ri-focus-3-line"></i> Contexte</div>
+          <h4>Contexte de la recherche</h4>
+          <p>{{ research.context }}</p>
+        </div>
+        <div class="research-card animate delay-2">
+          <div class="research-card-label"><i class="ri-flag-line"></i> Objectif</div>
+          <h4>But de la recherche</h4>
+          <p>{{ research.goal }}</p>
+        </div>
+        <div class="research-card animate delay-3">
+          <div class="research-card-label"><i class="ri-pulse-line"></i> État actuel</div>
+          <h4>Où en sommes-nous ?</h4>
+          <p>{{ research.current_state }}</p>
+        </div>
+        {% if research.results %}
+        <div class="research-card animate delay-3">
+          <div class="research-card-label"><i class="ri-trophy-line"></i> Résultats</div>
+          <h4>Résultats obtenus</h4>
+          <p>{{ research.results }}</p>
+        </div>
+        {% endif %}
+        {% if research.improvements %}
+        <div class="research-card animate delay-3">
+          <div class="research-card-label"><i class="ri-rocket-line"></i> Améliorations</div>
+          <h4>Pistes d'amélioration</h4>
+          <p>{{ research.improvements }}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label"><i class="ri-trophy-line"></i> Réalisations</div>
+      <h2 class="section-title">Nos projets</h2>
+      <p class="section-desc">Découvrez les projets que nous avons menés à bien</p>
+    </div>
+    <div class="card-grid">
+      {% for project in projects %}
+      <div class="card animate delay-{{ forloop.counter }}">
+        {% if project.image %}
+        <img src="{{ project.image.url }}" alt="{{ project.title }}" style="width:100%;height:200px;object-fit:cover;border-radius:12px;margin-bottom:20px">
+        {% endif %}
+        <span class="tag" style="margin-bottom:12px;display:inline-block">{{ project.get_category_display }}</span>
+        <h3>{{ project.title }}</h3>
+        <p>{{ project.description }}</p>
+        {% if project.tech_stack %}
+        <div class="card-tags">
+          {% for tech in project.tech_stack|split:"," %}
+          <span class="tag">{{ tech }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% if project.link %}
+        <a href="{{ project.link }}" target="_blank" rel="noopener" class="card-link">Voir le projet <i class="ri-arrow-right-line"></i></a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% if projects %}
+    <div style="text-align:center;margin-top:48px">
+      <a href="/realisations/" class="btn btn-outline">Toutes les réalisations <i class="ri-arrow-right-line"></i></a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="cta-section">
+      <div class="cta-box">
+        <h2>Prêt à démarrer votre projet ?</h2>
+        <p>Contactez-nous pour discuter de vos besoins et obtenir une solution sur mesure.</p>
+        <a href="/contact/" class="btn">Démarrer un projet <i class="ri-arrow-right-line"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

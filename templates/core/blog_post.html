@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }} — Minimum Tech{% endblock %}
+{% block content %}
+<div class="mesh-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+<div class="page-hero">
+  <h1>{{ post.title }}</h1>
+  <div style="display:flex;justify-content:center;gap:16px;margin-top:16px;font-size:0.9rem;color:var(--c-text2)">
+    <span><i class="ri-calendar-line"></i> {{ post.created_at|date:"d/m/Y" }}</span>
+    {% if post.tags %}<span><i class="ri-hashtag"></i> {{ post.tags }}</span>{% endif %}
+  </div>
+</div>
+<div class="blog-content">
+  {% if post.image %}
+  <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width:100%;border-radius:16px;margin-bottom:32px;max-height:400px;object-fit:cover">
+  {% endif %}
+  <div class="blog-article">
+    <div class="content">{{ post.content }}</div>
+  </div>
+  {% if post.link %}
+  <a href="{{ post.link }}" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:24px"><i class="ri-external-link-line"></i> Voir la source externe</a>
+  {% endif %}
+  <div style="margin-top:32px"><a href="/blog/" class="card-link"><i class="ri-arrow-left-line"></i> Retour au blog</a></div>
+</div>
+{% endblock %}

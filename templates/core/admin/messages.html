@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Messages — Admin MinTech{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-logo"><a href="/" class="nav-logo"><span class="logo-icon"><i class="ri-code-s-slash-line"></i></span><span class="logo-text">Min<span class="accent">Tech</span></span></a></div>
+    <nav class="admin-nav">
+      <a href="/admin-panel/"><i class="ri-dashboard-line"></i> Dashboard</a>
+      <a href="/admin-panel/services/"><i class="ri-service-line"></i> Services</a>
+      <a href="/admin-panel/projects/"><i class="ri-folder-line"></i> Réalisations</a>
+      <a href="/admin-panel/future-projects/"><i class="ri-time-line"></i> Projets futurs</a>
+      <a href="/admin-panel/research/"><i class="ri-microscope-line"></i> Recherche</a>
+      <a href="/admin-panel/blog/"><i class="ri-article-line"></i> Blog</a>
+      <a href="/admin-panel/hero/"><i class="ri-image-line"></i> Hero</a>
+      <a href="/admin-panel/company/"><i class="ri-settings-line"></i> Entreprise</a>
+      <a href="/admin-panel/messages/" class="active"><i class="ri-message-3-line"></i> Messages</a>
+    </nav>
+  </aside>
+  <main class="admin-content">
+    <div class="admin-header">
+      <h1>Messages de contact</h1>
+    </div>
+    {% if messages %}{% for msg in messages %}<div class="alert alert-success"><i class="ri-check-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
+    <div class="admin-table">
+      <table>
+        <thead><tr><th>Nom</th><th>Email</th><th>Sujet</th><th>Message</th><th>Date</th><th>Lu</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for m in messages_list %}
+          <tr style="{% if not m.read %}background:var(--c-surface2);font-weight:500{% endif %}">
+            <td style="font-weight:600">{{ m.name }}</td>
+            <td><a href="mailto:{{ m.email }}">{{ m.email }}</a></td>
+            <td>{{ m.subject|default:"—" }}</td>
+            <td>{{ m.message|truncatewords:15 }}</td>
+            <td>{{ m.created_at|date:"d/m/Y H:i" }}</td>
+            <td>{% if m.read %}✅{% else %}❌{% endif %}</td>
+            <td>
+              <div class="admin-actions">
+                {% if not m.read %}
+                <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="mark_read"><input type="hidden" name="id" value="{{ m.id }}"><button class="btn btn-sm btn-ghost" type="submit" title="Marquer comme lu"><i class="ri-check-double-line"></i></button></form>
+                {% endif %}
+                <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ m.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer ?')"><i class="ri-delete-bin-line"></i></button></form>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" style="text-align:center;color:var(--c-text2)">Aucun message pour le moment.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}
