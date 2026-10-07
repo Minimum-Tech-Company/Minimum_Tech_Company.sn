@@ -7,33 +7,39 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 from django.contrib.auth.models import User
-from core.models import Service, FutureProject, ResearchProject, Hero, CompanyInfo
+from core.models import Category, Service, FutureProject, ResearchProject, Hero, CompanyInfo
 
 # Create admin user
 if not User.objects.filter(username='admin').exists():
     User.objects.create_superuser('admin', 'admin@minimumtech.com', 'Admin@2024')
     print('Admin user created: admin / Admin@2024')
 
+# Ensure categories exist
+service_cats = {}
+for slug, name, order in [('data', 'Data & Analyse', 1), ('formation', 'Formation', 2), ('web', 'Web & SaaS', 3), ('recherche', 'Recherche', 4)]:
+    cat, _ = Category.objects.get_or_create(slug=slug, category_type='service', defaults={'name': name, 'display_order': order})
+    service_cats[slug] = cat
+
 # Seed services
 if Service.objects.count() == 0:
     Service.objects.create(
         title='Business Intelligence',
         description='Tableaux de bord et visualisation de données pour une prise de décision éclairée. Nous concevons des dashboards interactifs avec Power BI, Tableau et d\'autres outils BI pour transformer vos données en insights stratégiques.',
-        category='data',
+        category=service_cats['data'],
         icon='ri-bar-chart-grouped-line',
         display_order=1
     )
     Service.objects.create(
         title='Formation & Compétences',
         description='Formation de vos équipes sur les outils d\'analyse et de collecte de données : Power BI, SQL, Excel avancé, et bien plus. Programmes personnalisés adaptés à votre niveau et vos besoins métier.',
-        category='formation',
+        category=service_cats['formation'],
         icon='ri-book-open-line',
         display_order=2
     )
     Service.objects.create(
         title='Création de Sites Web',
         description='Développement de sites web professionnels et d\'applications SaaS sur mesure. Sites vitrines, e-commerce, plateformes SaaS — nous créons votre présence numérique avec les technologies modernes.',
-        category='web',
+        category=service_cats['web'],
         icon="ri-code-s-slash-line",
         display_order=3
     )

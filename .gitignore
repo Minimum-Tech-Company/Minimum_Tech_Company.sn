@@ -5,3 +5,7 @@ db.sqlite3
 media/
 staticfiles/
 nohup.out
+.env
+.env.local
+.vercel/
+

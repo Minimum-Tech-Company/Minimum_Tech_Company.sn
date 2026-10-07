@@ -56,7 +56,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=f'sqlite:///{BASE_DIR}/db.sqlite3',
-        conn_max_age=600,
+        conn_max_age=int(os.environ.get('DB_CONN_MAX_AGE', '600')),
+        conn_health_checks=True,
+        disable_server_side_cursors='pooler' in os.environ.get('DATABASE_URL', ''),
     )
 }
 
@@ -91,6 +93,11 @@ CACHES = {
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:8000').split(',')
 
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost:8000').split(',')
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
 STORAGES = {
     'default': {
         'BACKEND': 'django.core.files.storage.FileSystemStorage',
@@ -99,6 +106,23 @@ STORAGES = {
         'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
+
+# Media files → Supabase Storage (S3-compatible API) when configured.
+# Vercel has no persistent disk, so uploads must live in object storage.
+if os.environ.get('SUPABASE_S3_ENDPOINT') and os.environ.get('SUPABASE_STORAGE_BUCKET'):
+    STORAGES['default'] = {
+        'BACKEND': 'storages.backends.s3boto3.S3Storage',
+        'OPTIONS': {
+            'endpoint_url': os.environ['SUPABASE_S3_ENDPOINT'],
+            'bucket_name': os.environ['SUPABASE_STORAGE_BUCKET'],
+            'region_name': os.environ.get('SUPABASE_S3_REGION', 'us-east-1'),
+            'default_acl': 'public-read',
+            'querystring_auth': False,
+            'addressing_style': 'path',
+            'custom_domain': os.environ.get('SUPABASE_S3_CUSTOM_DOMAIN') or None,
+            'file_overwrite': False,
+        },
+    }
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

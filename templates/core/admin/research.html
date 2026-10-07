@@ -19,29 +19,68 @@
   </aside>
   <main class="admin-content">
     <div class="admin-header">
-      <h1>Projet de Recherche</h1>
+      <h1>Projets de Recherche</h1>
+      <button class="btn btn-primary" onclick="document.getElementById('modal').style.display='flex'"><i class="ri-add-line"></i> Ajouter</button>
     </div>
     {% if messages %}{% for msg in messages %}<div class="alert alert-success"><i class="ri-check-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
-    <div class="card" style="padding:32px">
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-group"><label>Titre</label><input type="text" name="title" value="{{ research.title|default:'' }}" required></div>
-        <div class="form-group"><label>Sous-titre</label><input type="text" name="subtitle" value="{{ research.subtitle|default:'' }}"></div>
-        <div class="form-group">
-          <label>Photo de couverture</label>
-          {% if research.image %}<img src="{{ research.image.url }}" alt="" style="max-height:120px;border-radius:8px;margin-bottom:8px;display:block">{% endif %}
-          <input type="file" name="image" accept="image/*">
-        </div>
-        <div class="form-group"><label>Contexte</label><textarea name="context" rows="4">{{ research.context|default:'' }}</textarea></div>
-        <div class="form-group"><label>Objectif</label><textarea name="goal" rows="4">{{ research.goal|default:'' }}</textarea></div>
-        <div class="form-group"><label>État actuel</label><textarea name="current_state" rows="4">{{ research.current_state|default:'' }}</textarea></div>
-        <div class="form-group"><label>Résultats</label><textarea name="results" rows="4">{{ research.results|default:'' }}</textarea></div>
-        <div class="form-group"><label>Améliorations</label><textarea name="improvements" rows="4">{{ research.improvements|default:'' }}</textarea></div>
-        <div class="form-group"><label>Lien externe</label><input type="url" name="link" value="{{ research.link|default:'' }}" placeholder="https://..."></div>
-        <div class="form-group"><label><input type="checkbox" name="active" {% if research.active or not research %}checked{% endif %}> Actif</label></div>
-        <button type="submit" class="btn btn-primary"><i class="ri-save-line"></i> Enregistrer</button>
-      </form>
+    <div class="admin-table">
+      <table>
+        <thead><tr><th>Photo</th><th>Titre</th><th>Lien</th><th>Actif</th><th>Créé le</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for r in research_list %}
+          <tr>
+            <td>{% if r.image %}<img src="{{ r.image.url }}" alt="" style="width:50px;height:50px;object-fit:cover;border-radius:6px">{% else %}<span style="color:var(--c-text2)">—</span>{% endif %}</td>
+            <td style="font-weight:600">{{ r.title }}</td>
+            <td>{% if r.link %}<a href="{{ r.link }}" target="_blank"><i class="ri-external-link-line"></i></a>{% endif %}</td>
+            <td>{% if r.active %}✅{% else %}❌{% endif %}</td>
+            <td>{{ r.created_at|date:"d/m/Y" }}</td>
+            <td>
+              <div class="admin-actions">
+                <button class="btn btn-sm btn-ghost" onclick="editResearch({{ r.id }})"><i class="ri-edit-line"></i></button>
+                <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ r.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer ce projet ?')"><i class="ri-delete-bin-line"></i></button></form>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" style="text-align:center;color:var(--c-text2);padding:32px">Aucun projet de recherche.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+
+    <div class="modal-overlay" id="modal" style="display:none">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header"><h2>Ajouter un projet de recherche</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-body">
+            <input type="hidden" name="action" value="create">
+            {% include 'core/admin/_research_fields.html' %}
+          </div>
+          <div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="document.getElementById('modal').style.display='none'">Annuler</button><button type="submit" class="btn btn-primary">Créer</button></div>
+        </form>
+      </div>
+    </div>
+
+    {% for r in research_list %}
+    <div class="modal-overlay" id="edit-{{ r.id }}" style="display:none">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header"><h2>Modifier : {{ r.title }}</h2><button class="modal-close" onclick="document.getElementById('edit-{{ r.id }}').style.display='none'">&times;</button></div>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-body">
+            <input type="hidden" name="action" value="update">
+            <input type="hidden" name="id" value="{{ r.id }}">
+            {% include 'core/admin/_research_fields.html' with r=r %}
+          </div>
+          <div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="document.getElementById('edit-{{ r.id }}').style.display='none'">Annuler</button><button type="submit" class="btn btn-primary">Modifier</button></div>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
   </main>
 </div>
+<script>
+function editResearch(id){ document.getElementById('edit-'+id).style.display='flex'; }
+</script>
 {% endblock %}

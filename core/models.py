@@ -92,11 +92,13 @@ class ResearchProject(models.Model):
     image = models.ImageField(upload_to='research/', blank=True, null=True)
     link = models.URLField(blank=True, null=True)
     active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'Projet de Recherche'
         verbose_name_plural = 'Projets de Recherche'
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.title

@@ -66,7 +66,7 @@ def futurs_projets_page(request):
 
 def research_page(request):
     context = {
-        'research': ResearchProject.objects.filter(active=True).first(),
+        'research_projects': ResearchProject.objects.filter(active=True).order_by('-created_at'),
         'company': get_company_info(),
     }
     return render(request, 'core/research.html', context)
@@ -252,24 +252,11 @@ def admin_future_projects(request):
 
 @login_required(login_url='/admin-panel/login/')
 def admin_research(request):
-    research = ResearchProject.objects.first()
     if request.method == 'POST':
-        if research:
-            research.title = request.POST.get('title', research.title)
-            research.subtitle = request.POST.get('subtitle', '')
-            research.context = request.POST.get('context', '')
-            research.goal = request.POST.get('goal', '')
-            research.current_state = request.POST.get('current_state', '')
-            research.results = request.POST.get('results', '')
-            research.improvements = request.POST.get('improvements', '')
-            research.link = request.POST.get('link', '')
-            research.active = 'active' in request.POST
-            if request.FILES.get('image'):
-                research.image = request.FILES['image']
-            research.save()
-        else:
-            research = ResearchProject.objects.create(
-                title=request.POST.get('title', 'Recherche sur les Robots Humanoïdes'),
+        action = request.POST.get('action')
+        if action == 'create':
+            ResearchProject.objects.create(
+                title=request.POST.get('title', 'Nouveau projet de recherche'),
                 subtitle=request.POST.get('subtitle', ''),
                 context=request.POST.get('context', ''),
                 goal=request.POST.get('goal', ''),
@@ -278,10 +265,29 @@ def admin_research(request):
                 improvements=request.POST.get('improvements', ''),
                 link=request.POST.get('link', ''),
                 image=request.FILES.get('image'),
+                active='active' in request.POST,
             )
-        messages.success(request, 'Projet de recherche mis à jour.')
+            messages.success(request, 'Projet de recherche créé.')
+        elif action == 'update':
+            r = ResearchProject.objects.get(id=request.POST['id'])
+            r.title = request.POST.get('title', r.title)
+            r.subtitle = request.POST.get('subtitle', '')
+            r.context = request.POST.get('context', '')
+            r.goal = request.POST.get('goal', '')
+            r.current_state = request.POST.get('current_state', '')
+            r.results = request.POST.get('results', '')
+            r.improvements = request.POST.get('improvements', '')
+            r.link = request.POST.get('link', '')
+            r.active = 'active' in request.POST
+            if request.FILES.get('image'):
+                r.image = request.FILES['image']
+            r.save()
+            messages.success(request, 'Projet de recherche mis à jour.')
+        elif action == 'delete':
+            ResearchProject.objects.filter(id=request.POST['id']).delete()
+            messages.success(request, 'Projet de recherche supprimé.')
         return redirect('admin_research')
-    ctx = {'research': research}
+    ctx = {'research_list': ResearchProject.objects.all().order_by('-created_at')}
     return render(request, 'core/admin/research.html', ctx)
 
 
