@@ -54,7 +54,7 @@
     <div class="card-grid">
       {% for service in services %}
       <div class="card animate delay-{{ forloop.counter }}">
-        <div class="card-icon{% if forloop.counter == 2 %} pink{% endif %}{% if forloop.counter == 3 %} teal{% endif %}">
+        <div class="card-icon">
           <i class="{{ service.icon }}"></i>
         </div>
         <span class="tag" style="margin-bottom:12px;display:inline-block">{{ service.category_display }}</span>
