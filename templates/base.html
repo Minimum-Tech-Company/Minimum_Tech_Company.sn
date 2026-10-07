@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <script>
       (function(){
         var t = localStorage.getItem('theme') || 'dark';
@@ -20,8 +21,7 @@
     <nav class="nav" id="nav">
         <div class="nav-inner">
             <a href="/" class="nav-logo">
-                <span class="logo-icon"><i class="ri-code-s-slash-line"></i></span>
-                <span class="logo-text">Min<span class="accent">Tech</span></span>
+                <img src="{% static 'images/logo.png' %}" alt="Minimum Tech" class="logo-img">
             </a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Accueil</a></li>
@@ -50,8 +50,7 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <a href="/" class="nav-logo">
-                        <span class="logo-icon"><i class="ri-code-s-slash-line"></i></span>
-                        <span class="logo-text">Min<span class="accent">Tech</span></span>
+                        <img src="{% static 'images/logo.png' %}" alt="Minimum Tech" class="logo-img">
                     </a>
                     <p class="footer-desc">{{ company.company_description|default:"Solutions technologiques innovantes pour propulser votre entreprise." }}</p>
                     <div class="footer-social">
