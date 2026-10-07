@@ -48,6 +48,41 @@
           <label>Texte du footer</label>
           <input type="text" name="footer_text" value="{% for info in infos %}{% if info.key == 'footer_text' %}{{ info.value }}{% endif %}{% endfor %}">
         </div>
+        <h3 style="margin:24px 0 12px;font-family:var(--font-display);font-size:1.1rem;color:var(--c-text)"><i class="ri-links-line"></i> Réseaux sociaux</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="form-group">
+            <label><i class="ri-facebook-fill"></i> Facebook</label>
+            <input type="url" name="facebook_url" placeholder="https://facebook.com/..." value="{% for info in infos %}{% if info.key == 'facebook_url' %}{{ info.value }}{% endif %}{% endfor %}">
+          </div>
+          <div class="form-group">
+            <label><i class="ri-linkedin-fill"></i> LinkedIn</label>
+            <input type="url" name="linkedin_url" placeholder="https://linkedin.com/..." value="{% for info in infos %}{% if info.key == 'linkedin_url' %}{{ info.value }}{% endif %}{% endfor %}">
+          </div>
+          <div class="form-group">
+            <label><i class="ri-twitter-x-fill"></i> X (Twitter)</label>
+            <input type="url" name="twitter_url" placeholder="https://x.com/..." value="{% for info in infos %}{% if info.key == 'twitter_url' %}{{ info.value }}{% endif %}{% endfor %}">
+          </div>
+          <div class="form-group">
+            <label><i class="ri-instagram-fill"></i> Instagram</label>
+            <input type="url" name="instagram_url" placeholder="https://instagram.com/..." value="{% for info in infos %}{% if info.key == 'instagram_url' %}{{ info.value }}{% endif %}{% endfor %}">
+          </div>
+          <div class="form-group">
+            <label><i class="ri-youtube-fill"></i> YouTube</label>
+            <input type="url" name="youtube_url" placeholder="https://youtube.com/..." value="{% for info in infos %}{% if info.key == 'youtube_url' %}{{ info.value }}{% endif %}{% endfor %}">
+          </div>
+          <div class="form-group">
+            <label><i class="ri-github-fill"></i> GitHub</label>
+            <input type="url" name="github_url" placeholder="https://github.com/..." value="{% for info in infos %}{% if info.key == 'github_url' %}{{ info.value }}{% endif %}{% endfor %}">
+          </div>
+          <div class="form-group">
+            <label><i class="ri-whatsapp-fill"></i> WhatsApp</label>
+            <input type="url" name="whatsapp_url" placeholder="https://wa.me/..." value="{% for info in infos %}{% if info.key == 'whatsapp_url' %}{{ info.value }}{% endif %}{% endfor %}">
+          </div>
+          <div class="form-group">
+            <label><i class="ri-tiktok-fill"></i> TikTok</label>
+            <input type="url" name="tiktok_url" placeholder="https://tiktok.com/..." value="{% for info in infos %}{% if info.key == 'tiktok_url' %}{{ info.value }}{% endif %}{% endfor %}">
+          </div>
+        </div>
         <button type="submit" class="btn btn-primary"><i class="ri-save-line"></i> Enregistrer</button>
       </form>
     </div>

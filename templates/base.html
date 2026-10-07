@@ -55,9 +55,14 @@
                     </a>
                     <p class="footer-desc">{{ company.company_description|default:"Solutions technologiques innovantes pour propulser votre entreprise." }}</p>
                     <div class="footer-social">
-                        <a href="#"><i class="ri-linkedin-fill"></i></a>
-                        <a href="#"><i class="ri-github-fill"></i></a>
-                        <a href="#"><i class="ri-twitter-x-fill"></i></a>
+                        {% if company.linkedin_url %}<a href="{{ company.linkedin_url }}" target="_blank" rel="noopener"><i class="ri-linkedin-fill"></i></a>{% endif %}
+                        {% if company.github_url %}<a href="{{ company.github_url }}" target="_blank" rel="noopener"><i class="ri-github-fill"></i></a>{% endif %}
+                        {% if company.twitter_url %}<a href="{{ company.twitter_url }}" target="_blank" rel="noopener"><i class="ri-twitter-x-fill"></i></a>{% endif %}
+                        {% if company.facebook_url %}<a href="{{ company.facebook_url }}" target="_blank" rel="noopener"><i class="ri-facebook-fill"></i></a>{% endif %}
+                        {% if company.instagram_url %}<a href="{{ company.instagram_url }}" target="_blank" rel="noopener"><i class="ri-instagram-fill"></i></a>{% endif %}
+                        {% if company.youtube_url %}<a href="{{ company.youtube_url }}" target="_blank" rel="noopener"><i class="ri-youtube-fill"></i></a>{% endif %}
+                        {% if company.whatsapp_url %}<a href="{{ company.whatsapp_url }}" target="_blank" rel="noopener"><i class="ri-whatsapp-fill"></i></a>{% endif %}
+                        {% if company.tiktok_url %}<a href="{{ company.tiktok_url }}" target="_blank" rel="noopener"><i class="ri-tiktok-fill"></i></a>{% endif %}
                     </div>
                 </div>
                 <div class="footer-col">

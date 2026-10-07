@@ -3,7 +3,11 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.cache import cache
 from .models import Service, Project, FutureProject, ResearchProject, BlogPost, Hero, CompanyInfo, ContactMessage
+
+MAX_LOGIN_ATTEMPTS = 3
+LOGIN_LOCKOUT_SECONDS = 20 * 60  # 20 minutes
 
 
 def get_company_info():
@@ -103,12 +107,28 @@ def contact_page(request):
 def admin_login(request):
     if request.user.is_authenticated:
         return redirect('admin_dashboard')
+
+    ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
+    cache_key = f'login_attempts_{ip}'
+    attempts = cache.get(cache_key, 0)
+
+    if attempts >= MAX_LOGIN_ATTEMPTS:
+        messages.error(request, f'Trop de tentatives. Réessayez dans 20 minutes.')
+        return render(request, 'core/admin/login.html')
+
     if request.method == 'POST':
         user = authenticate(request, username=request.POST.get('username'), password=request.POST.get('password'))
         if user:
             login(request, user)
+            cache.delete(cache_key)
             return redirect('admin_dashboard')
-        messages.error(request, 'Identifiants incorrects')
+        attempts += 1
+        cache.set(cache_key, attempts, LOGIN_LOCKOUT_SECONDS)
+        remaining = MAX_LOGIN_ATTEMPTS - attempts
+        if remaining > 0:
+            messages.error(request, f'Identifiants incorrects. Il vous reste {remaining} tentative(s).')
+        else:
+            messages.error(request, f'Trop de tentatives. Réessayez dans 20 minutes.')
     return render(request, 'core/admin/login.html')
 
 
