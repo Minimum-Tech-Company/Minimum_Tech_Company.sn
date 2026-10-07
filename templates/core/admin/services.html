@@ -11,6 +11,7 @@
       <a href="/admin-panel/future-projects/"><i class="ri-time-line"></i> Projets futurs</a>
       <a href="/admin-panel/research/"><i class="ri-microscope-line"></i> Recherche</a>
       <a href="/admin-panel/blog/"><i class="ri-article-line"></i> Blog</a>
+      <a href="/admin-panel/categories/"><i class="ri-price-tag-3-line"></i> Catégories</a>
       <a href="/admin-panel/hero/"><i class="ri-image-line"></i> Hero</a>
       <a href="/admin-panel/company/"><i class="ri-settings-line"></i> Entreprise</a>
       <a href="/admin-panel/messages/"><i class="ri-message-3-line"></i> Messages</a>
@@ -24,23 +25,26 @@
     {% if messages %}{% for msg in messages %}<div class="alert alert-success"><i class="ri-check-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
     <div class="admin-table">
       <table>
-        <thead><tr><th>Titre</th><th>Catégorie</th><th>Icône</th><th>Lien</th><th>Ordre</th><th>Actif</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Photo</th><th>Titre</th><th>Catégorie</th><th>Icône</th><th>Lien</th><th>Ordre</th><th>Actif</th><th>Actions</th></tr></thead>
         <tbody>
           {% for s in services %}
           <tr>
+            <td>{% if s.image %}<img src="{{ s.image.url }}" alt="" style="width:50px;height:50px;object-fit:cover;border-radius:6px">{% else %}<span style="color:var(--c-text2)">—</span>{% endif %}</td>
             <td style="font-weight:600">{{ s.title }}</td>
-            <td><span class="tag">{{ s.get_category_display }}</span></td>
+            <td><span class="tag">{{ s.category_display|default:"—" }}</span></td>
             <td><i class="{{ s.icon }}"></i></td>
             <td>{% if s.link %}<a href="{{ s.link }}" target="_blank"><i class="ri-external-link-line"></i></a>{% endif %}</td>
             <td>{{ s.display_order }}</td>
             <td>{% if s.active %}✅{% else %}❌{% endif %}</td>
             <td>
               <div class="admin-actions">
-                <button class="btn btn-sm btn-ghost" onclick="editService({{ s.id }},'{{ s.title|escapejs }}','{{ s.description|escapejs }}','{{ s.category }}','{{ s.icon }}','{{ s.link|default:'' }}',{{ s.display_order }},{% if s.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
+                <button class="btn btn-sm btn-ghost" onclick="editService({{ s.id }},'{{ s.title|escapejs }}','{{ s.description|escapejs }}',{{ s.category_id|default:'null' }},'{{ s.icon }}','{{ s.link|default:'' }}',{{ s.display_order }},{% if s.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
                 <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ s.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer ?')"><i class="ri-delete-bin-line"></i></button></form>
               </div>
             </td>
           </tr>
+          {% empty %}
+          <tr><td colspan="8" style="text-align:center;color:var(--c-text2);padding:32px">Aucun service.</td></tr>
           {% endfor %}
         </tbody>
       </table>
@@ -48,13 +52,14 @@
     <div class="modal-overlay" id="modal" style="display:none">
       <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header"><h2>Ajouter un service</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="modal-body">
             <input type="hidden" name="action" value="create">
             <div class="form-group"><label>Titre</label><input type="text" name="title" required></div>
+            <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
             <div class="form-group"><label>Description</label><textarea name="description" required></textarea></div>
-            <div class="form-group"><label>Catégorie</label><select name="category">{% for val, label in categories %}<option value="{{ val }}">{{ label }}</option>{% endfor %}</select></div>
+            <div class="form-group"><label>Catégorie</label><select name="category">{% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
             <div class="form-group"><label>Icône (RemixIcon)</label><input type="text" name="icon" value="ri-briefcase-line" placeholder="ri-code-line"></div>
             <div class="form-group"><label>Lien externe</label><input type="url" name="link" placeholder="https://..."></div>
             <div class="form-group"><label>Ordre</label><input type="number" name="display_order" value="0"></div>
@@ -66,14 +71,15 @@
     <div class="modal-overlay" id="editModal" style="display:none">
       <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header"><h2>Modifier le service</h2><button class="modal-close" onclick="document.getElementById('editModal').style.display='none'">&times;</button></div>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="modal-body">
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="id" id="edit_id">
             <div class="form-group"><label>Titre</label><input type="text" name="title" id="edit_title" required></div>
+            <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
             <div class="form-group"><label>Description</label><textarea name="description" id="edit_desc" required></textarea></div>
-            <div class="form-group"><label>Catégorie</label><select name="category" id="edit_cat">{% for val, label in categories %}<option value="{{ val }}">{{ label }}</option>{% endfor %}</select></div>
+            <div class="form-group"><label>Catégorie</label><select name="category" id="edit_cat">{% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
             <div class="form-group"><label>Icône</label><input type="text" name="icon" id="edit_icon"></div>
             <div class="form-group"><label>Lien</label><input type="url" name="link" id="edit_link"></div>
             <div class="form-group"><label>Ordre</label><input type="number" name="display_order" id="edit_order"></div>

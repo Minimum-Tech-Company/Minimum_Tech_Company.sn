@@ -1,16 +1,29 @@
 from django.db import models
 
 
-class Service(models.Model):
-    CATEGORY_CHOICES = [
-        ('data', 'Data & Analyse'),
-        ('formation', 'Formation'),
-        ('web', 'Développement Web'),
-        ('recherche', 'Recherche'),
+class Category(models.Model):
+    TYPE_CHOICES = [
+        ('service', 'Service'),
+        ('project', 'Réalisation'),
     ]
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
+    category_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='service')
+    display_order = models.IntegerField(default=0)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['display_order']
+        unique_together = ['slug', 'category_type']
+
+    def __str__(self):
+        return f"{self.name} ({self.get_category_type_display()})"
+
+
+class Service(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='data')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='services')
     icon = models.CharField(max_length=50, default='ri-briefcase-line')
     link = models.URLField(blank=True, null=True)
     image = models.ImageField(upload_to='services/', blank=True, null=True)
@@ -24,16 +37,15 @@ class Service(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def category_display(self):
+        return self.category.name if self.category else ''
+
 
 class Project(models.Model):
-    CATEGORY_CHOICES = [
-        ('realisation', 'Réalisation'),
-        ('partenariat', 'Partenariat'),
-        ('collaboration', 'Collaboration'),
-    ]
     title = models.CharField(max_length=200)
     description = models.TextField()
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='realisation')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='projects')
     image = models.ImageField(upload_to='projects/', blank=True, null=True)
     link = models.URLField(blank=True, null=True)
     tech_stack = models.CharField(max_length=500, blank=True, null=True)
@@ -46,6 +58,10 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def category_display(self):
+        return self.category.name if self.category else ''
 
 
 class FutureProject(models.Model):

@@ -11,6 +11,7 @@
       <a href="/admin-panel/future-projects/"><i class="ri-time-line"></i> Projets futurs</a>
       <a href="/admin-panel/research/"><i class="ri-microscope-line"></i> Recherche</a>
       <a href="/admin-panel/blog/"><i class="ri-article-line"></i> Blog</a>
+      <a href="/admin-panel/categories/"><i class="ri-price-tag-3-line"></i> Catégories</a>
       <a href="/admin-panel/hero/" class="active"><i class="ri-image-line"></i> Hero</a>
       <a href="/admin-panel/company/"><i class="ri-settings-line"></i> Entreprise</a>
       <a href="/admin-panel/messages/"><i class="ri-message-3-line"></i> Messages</a>
@@ -46,11 +47,12 @@
     <div class="modal-overlay" id="modal" style="display:none">
       <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header"><h2>Ajouter un Hero</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="modal-body">
             <input type="hidden" name="action" value="create">
             <div class="form-group"><label>Titre</label><input type="text" name="title" required></div>
+            <div class="form-group"><label>Photo de couverture</label><input type="file" name="background_image" accept="image/*"></div>
             <div class="form-group"><label>Sous-titre</label><input type="text" name="subtitle"></div>
             <div class="form-group"><label>Description</label><textarea name="description"></textarea></div>
             <div class="form-group"><label>Texte du bouton</label><input type="text" name="cta_text" value="Découvrir"></div>
@@ -64,12 +66,13 @@
     <div class="modal-overlay" id="editModal" style="display:none">
       <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header"><h2>Modifier le Hero</h2><button class="modal-close" onclick="document.getElementById('editModal').style.display='none'">&times;</button></div>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="modal-body">
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="id" id="edit_id">
             <div class="form-group"><label>Titre</label><input type="text" name="title" id="edit_title" required></div>
+            <div class="form-group"><label>Photo de couverture</label><input type="file" name="background_image" accept="image/*"></div>
             <div class="form-group"><label>Sous-titre</label><input type="text" name="subtitle" id="edit_subtitle"></div>
             <div class="form-group"><label>Description</label><textarea name="description" id="edit_desc"></textarea></div>
             <div class="form-group"><label>Texte du bouton</label><input type="text" name="cta_text" id="edit_cta_text"></div>

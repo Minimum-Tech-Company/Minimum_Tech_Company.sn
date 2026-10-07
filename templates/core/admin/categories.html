@@ -1,5 +1,5 @@
 {% extends 'base_admin.html' %}
-{% block title %}Projets Futurs — Admin MinTech{% endblock %}
+{% block title %}Catégories — Admin MinTech{% endblock %}
 {% block content %}
 <div class="admin-layout">
   <aside class="admin-sidebar" id="adminSidebar">
@@ -8,10 +8,10 @@
       <a href="/admin-panel/"><i class="ri-dashboard-line"></i> Dashboard</a>
       <a href="/admin-panel/services/"><i class="ri-service-line"></i> Services</a>
       <a href="/admin-panel/projects/"><i class="ri-folder-line"></i> Réalisations</a>
-      <a href="/admin-panel/future-projects/" class="active"><i class="ri-time-line"></i> Projets futurs</a>
+      <a href="/admin-panel/future-projects/"><i class="ri-time-line"></i> Projets futurs</a>
       <a href="/admin-panel/research/"><i class="ri-microscope-line"></i> Recherche</a>
       <a href="/admin-panel/blog/"><i class="ri-article-line"></i> Blog</a>
-      <a href="/admin-panel/categories/"><i class="ri-price-tag-3-line"></i> Catégories</a>
+      <a href="/admin-panel/categories/" class="active"><i class="ri-price-tag-3-line"></i> Catégories</a>
       <a href="/admin-panel/hero/"><i class="ri-image-line"></i> Hero</a>
       <a href="/admin-panel/company/"><i class="ri-settings-line"></i> Entreprise</a>
       <a href="/admin-panel/messages/"><i class="ri-message-3-line"></i> Messages</a>
@@ -19,44 +19,49 @@
   </aside>
   <main class="admin-content">
     <div class="admin-header">
-      <h1>Projets Futurs</h1>
+      <h1>Catégories</h1>
       <button class="btn btn-primary" onclick="document.getElementById('modal').style.display='flex'"><i class="ri-add-line"></i> Ajouter</button>
     </div>
     {% if messages %}{% for msg in messages %}<div class="alert alert-success"><i class="ri-check-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
     <div class="admin-table">
       <table>
-        <thead><tr><th>Titre</th><th>Date prévue</th><th>Lien</th><th>Ordre</th><th>Actif</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Nom</th><th>Slug</th><th>Type</th><th>Ordre</th><th>Actif</th><th>Actions</th></tr></thead>
         <tbody>
-          {% for p in projects %}
+          {% for c in cats %}
           <tr>
-            <td style="font-weight:600">{{ p.title }}</td>
-            <td>{{ p.expected_date|default:"—" }}</td>
-            <td>{% if p.link %}<a href="{{ p.link }}" target="_blank"><i class="ri-external-link-line"></i></a>{% endif %}</td>
-            <td>{{ p.display_order }}</td>
-            <td>{% if p.active %}✅{% else %}❌{% endif %}</td>
+            <td style="font-weight:600">{{ c.name }}</td>
+            <td><code>{{ c.slug }}</code></td>
+            <td><span class="tag">{{ c.get_category_type_display }}</span></td>
+            <td>{{ c.display_order }}</td>
+            <td>{% if c.active %}✅{% else %}❌{% endif %}</td>
             <td>
               <div class="admin-actions">
-                <button class="btn btn-sm btn-ghost" onclick="editFutureProject({{ p.id }},'{{ p.title|escapejs }}','{{ p.description|escapejs }}','{{ p.link|default:'' }}','{{ p.expected_date|default:''|escapejs }}',{{ p.display_order }},{% if p.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
-                <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ p.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer ?')"><i class="ri-delete-bin-line"></i></button></form>
+                <button class="btn btn-sm btn-ghost" onclick="editCategory({{ c.id }},'{{ c.name|escapejs }}','{{ c.slug|escapejs }}','{{ c.category_type }}',{{ c.display_order }},{% if c.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
+                <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ c.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer cette catégorie ?')"><i class="ri-delete-bin-line"></i></button></form>
               </div>
             </td>
           </tr>
+          {% empty %}
+          <tr><td colspan="6" style="text-align:center;color:var(--c-text2);padding:32px">Aucune catégorie.</td></tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
     <div class="modal-overlay" id="modal" style="display:none">
       <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-header"><h2>Ajouter un projet futur</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
-        <form method="post" enctype="multipart/form-data">
+        <div class="modal-header"><h2>Ajouter une catégorie</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
+        <form method="post">
           {% csrf_token %}
           <div class="modal-body">
             <input type="hidden" name="action" value="create">
-            <div class="form-group"><label>Titre</label><input type="text" name="title" required></div>
-            <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
-            <div class="form-group"><label>Description</label><textarea name="description" required></textarea></div>
-            <div class="form-group"><label>Date prévue</label><input type="text" name="expected_date" placeholder="Ex: T2 2026"></div>
-            <div class="form-group"><label>Lien externe</label><input type="url" name="link" placeholder="https://..."></div>
+            <div class="form-group"><label>Nom</label><input type="text" name="name" required placeholder="Ex: Data & Analyse"></div>
+            <div class="form-group"><label>Slug (URL)</label><input type="text" name="slug" required placeholder="Ex: data"></div>
+            <div class="form-group"><label>Type</label>
+              <select name="category_type">
+                <option value="service">Service</option>
+                <option value="project">Réalisation</option>
+              </select>
+            </div>
             <div class="form-group"><label>Ordre</label><input type="number" name="display_order" value="0"></div>
           </div>
           <div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="document.getElementById('modal').style.display='none'">Annuler</button><button type="submit" class="btn btn-primary">Créer</button></div>
@@ -65,17 +70,20 @@
     </div>
     <div class="modal-overlay" id="editModal" style="display:none">
       <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-header"><h2>Modifier le projet futur</h2><button class="modal-close" onclick="document.getElementById('editModal').style.display='none'">&times;</button></div>
-        <form method="post" enctype="multipart/form-data">
+        <div class="modal-header"><h2>Modifier la catégorie</h2><button class="modal-close" onclick="document.getElementById('editModal').style.display='none'">&times;</button></div>
+        <form method="post">
           {% csrf_token %}
           <div class="modal-body">
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="id" id="edit_id">
-            <div class="form-group"><label>Titre</label><input type="text" name="title" id="edit_title" required></div>
-            <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
-            <div class="form-group"><label>Description</label><textarea name="description" id="edit_desc" required></textarea></div>
-            <div class="form-group"><label>Date prévue</label><input type="text" name="expected_date" id="edit_date"></div>
-            <div class="form-group"><label>Lien</label><input type="url" name="link" id="edit_link"></div>
+            <div class="form-group"><label>Nom</label><input type="text" name="name" id="edit_name" required></div>
+            <div class="form-group"><label>Slug (URL)</label><input type="text" name="slug" id="edit_slug" required></div>
+            <div class="form-group"><label>Type</label>
+              <select name="category_type" id="edit_type">
+                <option value="service">Service</option>
+                <option value="project">Réalisation</option>
+              </select>
+            </div>
             <div class="form-group"><label>Ordre</label><input type="number" name="display_order" id="edit_order"></div>
             <div class="form-group"><label><input type="checkbox" name="active" id="edit_active" checked> Actif</label></div>
           </div>
@@ -86,12 +94,11 @@
   </main>
 </div>
 <script>
-function editFutureProject(id,title,desc,link,date,order,active){
+function editCategory(id,name,slug,type,order,active){
   document.getElementById('edit_id').value=id;
-  document.getElementById('edit_title').value=title;
-  document.getElementById('edit_desc').value=desc;
-  document.getElementById('edit_link').value=link;
-  document.getElementById('edit_date').value=date;
+  document.getElementById('edit_name').value=name;
+  document.getElementById('edit_slug').value=slug;
+  document.getElementById('edit_type').value=type;
   document.getElementById('edit_order').value=order;
   document.getElementById('edit_active').checked=active==1;
   document.getElementById('editModal').style.display='flex';

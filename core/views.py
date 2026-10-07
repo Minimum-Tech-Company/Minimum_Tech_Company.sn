@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.cache import cache
-from .models import Service, Project, FutureProject, ResearchProject, BlogPost, Hero, CompanyInfo, ContactMessage
+from .models import Category, Service, Project, FutureProject, ResearchProject, BlogPost, Hero, CompanyInfo, ContactMessage
 
 MAX_LOGIN_ATTEMPTS = 3
 LOGIN_LOCKOUT_SECONDS = 20 * 60  # 20 minutes
@@ -20,7 +20,7 @@ def index(request):
     context = {
         'hero': Hero.objects.filter(active=True).first(),
         'services': Service.objects.filter(active=True)[:6],
-        'service_categories': dict(Service.CATEGORY_CHOICES),
+        'service_categories': list(Category.objects.filter(category_type='service', active=True).values('slug', 'name')),
         'projects': Project.objects.filter(active=True)[:3],
         'research': ResearchProject.objects.filter(active=True).first(),
         'company': get_company_info(),
@@ -32,10 +32,10 @@ def services_page(request):
     category = request.GET.get('cat', '')
     services = Service.objects.filter(active=True)
     if category:
-        services = services.filter(category=category)
+        services = services.filter(category__slug=category)
     context = {
         'services': services,
-        'categories': Service.CATEGORY_CHOICES,
+        'categories': Category.objects.filter(category_type='service', active=True),
         'current_category': category,
         'company': get_company_info(),
     }
@@ -46,10 +46,10 @@ def realisations_page(request):
     category = request.GET.get('cat', '')
     projects = Project.objects.filter(active=True)
     if category:
-        projects = projects.filter(category=category)
+        projects = projects.filter(category__slug=category)
     context = {
         'projects': projects,
-        'categories': Project.CATEGORY_CHOICES,
+        'categories': Category.objects.filter(category_type='project', active=True),
         'current_category': category,
         'company': get_company_info(),
     }
@@ -158,9 +158,10 @@ def admin_services(request):
             Service.objects.create(
                 title=request.POST['title'],
                 description=request.POST['description'],
-                category=request.POST.get('category', 'data'),
+                category_id=request.POST.get('category') or None,
                 icon=request.POST.get('icon', 'ri-briefcase-line'),
                 link=request.POST.get('link', ''),
+                image=request.FILES.get('image'),
                 display_order=int(request.POST.get('display_order', 0)),
             )
             messages.success(request, 'Service créé.')
@@ -168,9 +169,11 @@ def admin_services(request):
             s = Service.objects.get(id=request.POST['id'])
             s.title = request.POST['title']
             s.description = request.POST['description']
-            s.category = request.POST.get('category', 'data')
+            s.category_id = request.POST.get('category') or None
             s.icon = request.POST.get('icon', 'ri-briefcase-line')
             s.link = request.POST.get('link', '')
+            if request.FILES.get('image'):
+                s.image = request.FILES['image']
             s.display_order = int(request.POST.get('display_order', 0))
             s.active = 'active' in request.POST
             s.save()
@@ -178,7 +181,7 @@ def admin_services(request):
         elif action == 'delete':
             Service.objects.filter(id=request.POST['id']).delete()
             messages.success(request, 'Service supprimé.')
-    ctx = {'services': Service.objects.all().order_by('display_order'), 'categories': Service.CATEGORY_CHOICES}
+    ctx = {'services': Service.objects.all().order_by('display_order'), 'categories': Category.objects.filter(category_type='service', active=True)}
     return render(request, 'core/admin/services.html', ctx)
 
 
@@ -190,7 +193,8 @@ def admin_projects(request):
             Project.objects.create(
                 title=request.POST['title'],
                 description=request.POST['description'],
-                category=request.POST.get('category', 'realisation'),
+                category_id=request.POST.get('category') or None,
+                image=request.FILES.get('image'),
                 link=request.POST.get('link', ''),
                 tech_stack=request.POST.get('tech_stack', ''),
                 display_order=int(request.POST.get('display_order', 0)),
@@ -200,7 +204,9 @@ def admin_projects(request):
             p = Project.objects.get(id=request.POST['id'])
             p.title = request.POST['title']
             p.description = request.POST['description']
-            p.category = request.POST.get('category', 'realisation')
+            p.category_id = request.POST.get('category') or None
+            if request.FILES.get('image'):
+                p.image = request.FILES['image']
             p.link = request.POST.get('link', '')
             p.tech_stack = request.POST.get('tech_stack', '')
             p.display_order = int(request.POST.get('display_order', 0))
@@ -210,7 +216,7 @@ def admin_projects(request):
         elif action == 'delete':
             Project.objects.filter(id=request.POST['id']).delete()
             messages.success(request, 'Projet supprimé.')
-    ctx = {'projects': Project.objects.all().order_by('display_order'), 'categories': Project.CATEGORY_CHOICES}
+    ctx = {'projects': Project.objects.all().order_by('display_order'), 'categories': Category.objects.filter(category_type='project', active=True)}
     return render(request, 'core/admin/projects.html', ctx)
 
 
@@ -222,6 +228,7 @@ def admin_future_projects(request):
             FutureProject.objects.create(
                 title=request.POST['title'],
                 description=request.POST['description'],
+                image=request.FILES.get('image'),
                 link=request.POST.get('link', ''),
                 expected_date=request.POST.get('expected_date', ''),
                 display_order=int(request.POST.get('display_order', 0)),
@@ -230,6 +237,8 @@ def admin_future_projects(request):
             p = FutureProject.objects.get(id=request.POST['id'])
             p.title = request.POST['title']
             p.description = request.POST['description']
+            if request.FILES.get('image'):
+                p.image = request.FILES['image']
             p.link = request.POST.get('link', '')
             p.expected_date = request.POST.get('expected_date', '')
             p.display_order = int(request.POST.get('display_order', 0))
@@ -255,6 +264,8 @@ def admin_research(request):
             research.improvements = request.POST.get('improvements', '')
             research.link = request.POST.get('link', '')
             research.active = 'active' in request.POST
+            if request.FILES.get('image'):
+                research.image = request.FILES['image']
             research.save()
         else:
             research = ResearchProject.objects.create(
@@ -266,6 +277,7 @@ def admin_research(request):
                 results=request.POST.get('results', ''),
                 improvements=request.POST.get('improvements', ''),
                 link=request.POST.get('link', ''),
+                image=request.FILES.get('image'),
             )
         messages.success(request, 'Projet de recherche mis à jour.')
         return redirect('admin_research')
@@ -282,6 +294,7 @@ def admin_blog(request):
                 title=request.POST['title'],
                 content=request.POST['content'],
                 excerpt=request.POST.get('excerpt', ''),
+                image=request.FILES.get('image'),
                 tags=request.POST.get('tags', ''),
                 link=request.POST.get('link', ''),
                 published='published' in request.POST,
@@ -291,6 +304,8 @@ def admin_blog(request):
             b = BlogPost.objects.get(id=request.POST['id'])
             b.title = request.POST['title']
             b.content = request.POST['content']
+            if request.FILES.get('image'):
+                b.image = request.FILES['image']
             b.excerpt = request.POST.get('excerpt', '')
             b.tags = request.POST.get('tags', '')
             b.link = request.POST.get('link', '')
@@ -316,6 +331,7 @@ def admin_hero(request):
                 description=request.POST.get('description', ''),
                 cta_text=request.POST.get('cta_text', 'Découvrir'),
                 cta_link=request.POST.get('cta_link', '/services'),
+                background_image=request.FILES.get('background_image'),
                 active='active' in request.POST,
             )
         elif action == 'update':
@@ -327,6 +343,8 @@ def admin_hero(request):
             h.description = request.POST.get('description', '')
             h.cta_text = request.POST.get('cta_text', 'Découvrir')
             h.cta_link = request.POST.get('cta_link', '/services')
+            if request.FILES.get('background_image'):
+                h.background_image = request.FILES['background_image']
             h.active = 'active' in request.POST
             h.save()
         elif action == 'delete':
@@ -356,6 +374,34 @@ def admin_messages(request):
             ContactMessage.objects.filter(id=request.POST['id']).delete()
     ctx = {'messages_list': ContactMessage.objects.all()}
     return render(request, 'core/admin/messages.html', ctx)
+
+
+@login_required(login_url='/admin-panel/login/')
+def admin_categories(request):
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'create':
+            Category.objects.create(
+                name=request.POST['name'],
+                slug=request.POST['slug'],
+                category_type=request.POST.get('category_type', 'service'),
+                display_order=int(request.POST.get('display_order', 0)),
+            )
+            messages.success(request, 'Catégorie créée.')
+        elif action == 'update':
+            c = Category.objects.get(id=request.POST['id'])
+            c.name = request.POST['name']
+            c.slug = request.POST['slug']
+            c.category_type = request.POST.get('category_type', 'service')
+            c.display_order = int(request.POST.get('display_order', 0))
+            c.active = 'active' in request.POST
+            c.save()
+            messages.success(request, 'Catégorie mise à jour.')
+        elif action == 'delete':
+            Category.objects.filter(id=request.POST['id']).delete()
+            messages.success(request, 'Catégorie supprimée.')
+    ctx = {'cats': Category.objects.all().order_by('category_type', 'display_order')}
+    return render(request, 'core/admin/categories.html', ctx)
 
 
 # ============ JSON API ============

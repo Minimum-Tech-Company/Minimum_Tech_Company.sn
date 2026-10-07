@@ -10,15 +10,18 @@
   <div class="container">
     <div class="cat-filter">
       <a href="/services/" class="{% if not current_category %}active{% endif %}">Tous</a>
-      {% for val, label in categories %}
-      <a href="/services/?cat={{ val }}" class="{% if current_category == val %}active{% endif %}">{{ label }}</a>
+      {% for cat in categories %}
+      <a href="/services/?cat={{ cat.slug }}" class="{% if current_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
       {% endfor %}
     </div>
     <div class="card-grid">
       {% for service in services %}
       <div class="card animate delay-{{ forloop.counter }}">
+        {% if service.image %}
+        <img src="{{ service.image.url }}" alt="{{ service.title }}" style="width:100%;height:200px;object-fit:cover;border-radius:12px;margin-bottom:20px">
+        {% endif %}
         <div class="card-icon"><i class="{{ service.icon }}"></i></div>
-        <span class="tag" style="margin-bottom:12px;display:inline-block">{{ service.get_category_display }}</span>
+        <span class="tag" style="margin-bottom:12px;display:inline-block">{{ service.category_display }}</span>
         <h3>{{ service.title }}</h3>
         <p>{{ service.description }}</p>
         {% if service.link %}

@@ -11,6 +11,7 @@
       <a href="/admin-panel/future-projects/"><i class="ri-time-line"></i> Projets futurs</a>
       <a href="/admin-panel/research/" class="active"><i class="ri-microscope-line"></i> Recherche</a>
       <a href="/admin-panel/blog/"><i class="ri-article-line"></i> Blog</a>
+      <a href="/admin-panel/categories/"><i class="ri-price-tag-3-line"></i> Catégories</a>
       <a href="/admin-panel/hero/"><i class="ri-image-line"></i> Hero</a>
       <a href="/admin-panel/company/"><i class="ri-settings-line"></i> Entreprise</a>
       <a href="/admin-panel/messages/"><i class="ri-message-3-line"></i> Messages</a>
@@ -22,10 +23,15 @@
     </div>
     {% if messages %}{% for msg in messages %}<div class="alert alert-success"><i class="ri-check-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
     <div class="card" style="padding:32px">
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group"><label>Titre</label><input type="text" name="title" value="{{ research.title|default:'' }}" required></div>
         <div class="form-group"><label>Sous-titre</label><input type="text" name="subtitle" value="{{ research.subtitle|default:'' }}"></div>
+        <div class="form-group">
+          <label>Photo de couverture</label>
+          {% if research.image %}<img src="{{ research.image.url }}" alt="" style="max-height:120px;border-radius:8px;margin-bottom:8px;display:block">{% endif %}
+          <input type="file" name="image" accept="image/*">
+        </div>
         <div class="form-group"><label>Contexte</label><textarea name="context" rows="4">{{ research.context|default:'' }}</textarea></div>
         <div class="form-group"><label>Objectif</label><textarea name="goal" rows="4">{{ research.goal|default:'' }}</textarea></div>
         <div class="form-group"><label>État actuel</label><textarea name="current_state" rows="4">{{ research.current_state|default:'' }}</textarea></div>

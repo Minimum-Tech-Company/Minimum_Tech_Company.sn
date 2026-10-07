@@ -15,6 +15,10 @@
 <section class="section">
   <div class="container" style="max-width:900px">
 
+    {% if research.image %}
+    <img src="{{ research.image.url }}" alt="{{ research.title }}" style="width:100%;max-height:400px;object-fit:cover;border-radius:16px;margin-bottom:32px" class="animate delay-1">
+    {% endif %}
+
     <div class="research-card animate delay-1" style="margin-bottom:24px">
       <div class="research-card-label"><i class="ri-focus-3-line"></i> Contexte</div>
       <h4>Contexte de la recherche</h4>

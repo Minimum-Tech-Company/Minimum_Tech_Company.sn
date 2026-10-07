@@ -11,6 +11,7 @@
       <a href="/admin-panel/future-projects/"><i class="ri-time-line"></i> Projets futurs</a>
       <a href="/admin-panel/research/"><i class="ri-microscope-line"></i> Recherche</a>
       <a href="/admin-panel/blog/"><i class="ri-article-line"></i> Blog</a>
+      <a href="/admin-panel/categories/"><i class="ri-price-tag-3-line"></i> Catégories</a>
       <a href="/admin-panel/hero/"><i class="ri-image-line"></i> Hero</a>
       <a href="/admin-panel/company/"><i class="ri-settings-line"></i> Entreprise</a>
       <a href="/admin-panel/messages/"><i class="ri-message-3-line"></i> Messages</a>
@@ -24,23 +25,26 @@
     {% if messages %}{% for msg in messages %}<div class="alert alert-success"><i class="ri-check-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
     <div class="admin-table">
       <table>
-        <thead><tr><th>Titre</th><th>Catégorie</th><th>Tech Stack</th><th>Lien</th><th>Ordre</th><th>Actif</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Photo</th><th>Titre</th><th>Catégorie</th><th>Tech Stack</th><th>Lien</th><th>Ordre</th><th>Actif</th><th>Actions</th></tr></thead>
         <tbody>
           {% for p in projects %}
           <tr>
+            <td>{% if p.image %}<img src="{{ p.image.url }}" alt="" style="width:50px;height:50px;object-fit:cover;border-radius:6px">{% else %}<span style="color:var(--c-text2)">—</span>{% endif %}</td>
             <td style="font-weight:600">{{ p.title }}</td>
-            <td><span class="tag">{{ p.get_category_display }}</span></td>
+            <td><span class="tag">{{ p.category_display|default:"—" }}</span></td>
             <td>{{ p.tech_stack|default:"—" }}</td>
             <td>{% if p.link %}<a href="{{ p.link }}" target="_blank"><i class="ri-external-link-line"></i></a>{% endif %}</td>
             <td>{{ p.display_order }}</td>
             <td>{% if p.active %}✅{% else %}❌{% endif %}</td>
             <td>
               <div class="admin-actions">
-                <button class="btn btn-sm btn-ghost" onclick="editProject({{ p.id }},'{{ p.title|escapejs }}','{{ p.description|escapejs }}','{{ p.category }}','{{ p.link|default:'' }}','{{ p.tech_stack|default:''|escapejs }}',{{ p.display_order }},{% if p.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
+                <button class="btn btn-sm btn-ghost" onclick="editProject({{ p.id }},'{{ p.title|escapejs }}','{{ p.description|escapejs }}',{{ p.category_id|default:'null' }},'{{ p.link|default:'' }}','{{ p.tech_stack|default:''|escapejs }}',{{ p.display_order }},{% if p.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
                 <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ p.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer ?')"><i class="ri-delete-bin-line"></i></button></form>
               </div>
             </td>
           </tr>
+          {% empty %}
+          <tr><td colspan="8" style="text-align:center;color:var(--c-text2);padding:32px">Aucune réalisation.</td></tr>
           {% endfor %}
         </tbody>
       </table>
@@ -48,13 +52,14 @@
     <div class="modal-overlay" id="modal" style="display:none">
       <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header"><h2>Ajouter une réalisation</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="modal-body">
             <input type="hidden" name="action" value="create">
             <div class="form-group"><label>Titre</label><input type="text" name="title" required></div>
             <div class="form-group"><label>Description</label><textarea name="description" required></textarea></div>
-            <div class="form-group"><label>Catégorie</label><select name="category">{% for val, label in categories %}<option value="{{ val }}">{{ label }}</option>{% endfor %}</select></div>
+            <div class="form-group"><label>Catégorie</label><select name="category">{% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
+            <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
             <div class="form-group"><label>Tech Stack (séparé par virgules)</label><input type="text" name="tech_stack" placeholder="Django, React, PostgreSQL"></div>
             <div class="form-group"><label>Lien externe</label><input type="url" name="link" placeholder="https://..."></div>
             <div class="form-group"><label>Ordre</label><input type="number" name="display_order" value="0"></div>
@@ -66,14 +71,15 @@
     <div class="modal-overlay" id="editModal" style="display:none">
       <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header"><h2>Modifier la réalisation</h2><button class="modal-close" onclick="document.getElementById('editModal').style.display='none'">&times;</button></div>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="modal-body">
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="id" id="edit_id">
             <div class="form-group"><label>Titre</label><input type="text" name="title" id="edit_title" required></div>
             <div class="form-group"><label>Description</label><textarea name="description" id="edit_desc" required></textarea></div>
-            <div class="form-group"><label>Catégorie</label><select name="category" id="edit_cat">{% for val, label in categories %}<option value="{{ val }}">{{ label }}</option>{% endfor %}</select></div>
+            <div class="form-group"><label>Catégorie</label><select name="category" id="edit_cat">{% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
+            <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
             <div class="form-group"><label>Tech Stack</label><input type="text" name="tech_stack" id="edit_tech"></div>
             <div class="form-group"><label>Lien</label><input type="url" name="link" id="edit_link"></div>
             <div class="form-group"><label>Ordre</label><input type="number" name="display_order" id="edit_order"></div>
@@ -90,7 +96,7 @@ function editProject(id,title,desc,cat,link,tech,order,active){
   document.getElementById('edit_id').value=id;
   document.getElementById('edit_title').value=title;
   document.getElementById('edit_desc').value=desc;
-  document.getElementById('edit_cat').value=cat;
+  if(cat) document.getElementById('edit_cat').value=cat;
   document.getElementById('edit_link').value=link;
   document.getElementById('edit_tech').value=tech;
   document.getElementById('edit_order').value=order;

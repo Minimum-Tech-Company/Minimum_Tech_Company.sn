@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin-panel/blog/', views.admin_blog, name='admin_blog'),
     path('admin-panel/hero/', views.admin_hero, name='admin_hero'),
     path('admin-panel/company/', views.admin_company, name='admin_company'),
+    path('admin-panel/categories/', views.admin_categories, name='admin_categories'),
     path('admin-panel/messages/', views.admin_messages, name='admin_messages'),
     # API
     path('api/services/', views.api_services),
