@@ -44,7 +44,11 @@ def services_page(request):
 
 def service_detail_page(request, pk):
     service = get_object_or_404(Service, pk=pk, active=True)
-    context = {'service': service, 'company': get_company_info()}
+    context = {
+        'service': service,
+        'projects': Project.objects.filter(active=True),
+        'company': get_company_info(),
+    }
     return render(request, 'core/service_detail.html', context)
 
 
