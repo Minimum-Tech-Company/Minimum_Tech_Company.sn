@@ -41,11 +41,16 @@ def convert_values(apps, schema_editor):
         ) WHERE category IN ('realisation','partenariat','collaboration')
     """)
     # Nullify unmatched values
-    schema_editor.execute("""
-        UPDATE core_service SET category = NULL WHERE category IS NOT NULL AND category NOT GLOB '[0-9]*'
+    vendor = schema_editor.connection.vendor
+    if vendor == 'postgresql':
+        non_numeric = "category !~ '^[0-9]+$'"
+    else:
+        non_numeric = "category NOT GLOB '[0-9]*'"
+    schema_editor.execute(f"""
+        UPDATE core_service SET category = NULL WHERE category IS NOT NULL AND {non_numeric}
     """)
-    schema_editor.execute("""
-        UPDATE core_project SET category = NULL WHERE category IS NOT NULL AND category NOT GLOB '[0-9]*'
+    schema_editor.execute(f"""
+        UPDATE core_project SET category = NULL WHERE category IS NOT NULL AND {non_numeric}
     """)
 
 

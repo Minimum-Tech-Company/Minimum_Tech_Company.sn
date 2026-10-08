@@ -9,3 +9,5 @@ nohup.out
 .env.local
 .vercel/
 
+.vercel
+.env*
