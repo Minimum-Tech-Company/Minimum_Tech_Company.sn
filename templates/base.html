@@ -25,10 +25,10 @@
             </a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Accueil</a></li>
-                <li><a href="/services/" class="{% if request.path == '/services/' %}active{% endif %}">Services</a></li>
-                <li><a href="/realisations/" class="{% if request.path == '/realisations/' %}active{% endif %}">Réalisations</a></li>
-                <li><a href="/recherche/" class="{% if request.path == '/recherche/' %}active{% endif %}">Recherche</a></li>
-                <li><a href="/blog/" class="{% if request.path == '/blog/' %}active{% endif %}">Blog</a></li>
+                <li><a href="/services/" class="{% if request.path|slice:':10' == '/services/' %}active{% endif %}">Services</a></li>
+                <li><a href="/realisations/" class="{% if request.path|slice:':15' == '/realisations/' %}active{% endif %}">Réalisations</a></li>
+                <li><a href="/recherche/" class="{% if request.path|slice:':11' == '/recherche/' %}active{% endif %}">Recherche</a></li>
+                <li><a href="/blog/" class="{% if request.path|slice:':6' == '/blog/' %}active{% endif %}">Blog</a></li>
                 <li><a href="/contact/" class="{% if request.path == '/contact/' %}active{% endif %}">Contact</a></li>
             </ul>
             <div style="display:flex;align-items:center;gap:8px">

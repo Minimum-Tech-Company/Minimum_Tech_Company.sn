@@ -24,9 +24,7 @@
         <span class="tag" style="margin-bottom:12px;display:inline-block">{{ service.category_display }}</span>
         <h3>{{ service.title }}</h3>
         <p>{{ service.description }}</p>
-        {% if service.link %}
-        <a href="{{ service.link }}" target="_blank" rel="noopener" class="card-link">En savoir plus <i class="ri-arrow-right-line"></i></a>
-        {% endif %}
+        <a href="/services/{{ service.pk }}/" class="card-link">En savoir plus <i class="ri-arrow-right-line"></i></a>
       </div>
       {% empty %}
       <div class="empty-state" style="grid-column:1/-1"><i class="ri-inbox-line"></i><p>Aucun service dans cette catégorie.</p></div>

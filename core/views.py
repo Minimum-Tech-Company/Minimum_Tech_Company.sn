@@ -42,6 +42,12 @@ def services_page(request):
     return render(request, 'core/services.html', context)
 
 
+def service_detail_page(request, pk):
+    service = get_object_or_404(Service, pk=pk, active=True)
+    context = {'service': service, 'company': get_company_info()}
+    return render(request, 'core/service_detail.html', context)
+
+
 def realisations_page(request):
     category = request.GET.get('cat', '')
     projects = Project.objects.filter(active=True)
