@@ -47,6 +47,7 @@ class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='projects')
+    service_category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='service_projects', limit_choices_to={'category_type': 'service'})
     image = models.ImageField(upload_to='projects/', blank=True, null=True)
     link = models.URLField(blank=True, null=True)
     tech_stack = models.CharField(max_length=500, blank=True, null=True)
@@ -63,6 +64,10 @@ class Project(models.Model):
     @property
     def category_display(self):
         return self.category.name if self.category else ''
+
+    @property
+    def service_category_display(self):
+        return self.service_category.name if self.service_category else ''
 
 
 class FutureProject(models.Model):

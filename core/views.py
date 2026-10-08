@@ -17,11 +17,14 @@ def get_company_info():
 # ============ PAGES PUBLIQUES ============
 
 def index(request):
+    realisations = Project.objects.filter(active=True, category__slug='realisation')
+    colabs = Project.objects.filter(active=True, category__slug__in=['partenariat', 'collaboration'])
     context = {
         'hero': Hero.objects.filter(active=True).first(),
         'services': Service.objects.filter(active=True)[:6],
         'service_categories': list(Category.objects.filter(category_type='service', active=True).values('slug', 'name')),
-        'projects': Project.objects.filter(active=True)[:3],
+        'realisations': realisations[:6],
+        'colabs': colabs[:6],
         'research': ResearchProject.objects.filter(active=True).first(),
         'company': get_company_info(),
     }
@@ -46,7 +49,7 @@ def service_detail_page(request, pk):
     service = get_object_or_404(Service, pk=pk, active=True)
     context = {
         'service': service,
-        'projects': Project.objects.filter(active=True),
+        'projects': Project.objects.filter(active=True, service_category=service.category) if service.category else Project.objects.none(),
         'company': get_company_info(),
     }
     return render(request, 'core/service_detail.html', context)
@@ -206,6 +209,7 @@ def admin_projects(request):
                 title=request.POST['title'],
                 description=request.POST['description'],
                 category_id=request.POST.get('category') or None,
+                service_category_id=request.POST.get('service_category') or None,
                 image=request.FILES.get('image'),
                 link=request.POST.get('link', ''),
                 tech_stack=request.POST.get('tech_stack', ''),
@@ -217,6 +221,7 @@ def admin_projects(request):
             p.title = request.POST['title']
             p.description = request.POST['description']
             p.category_id = request.POST.get('category') or None
+            p.service_category_id = request.POST.get('service_category') or None
             if request.FILES.get('image'):
                 p.image = request.FILES['image']
             p.link = request.POST.get('link', '')
@@ -228,7 +233,11 @@ def admin_projects(request):
         elif action == 'delete':
             Project.objects.filter(id=request.POST['id']).delete()
             messages.success(request, 'Projet supprimé.')
-    ctx = {'projects': Project.objects.all().order_by('display_order'), 'categories': Category.objects.filter(category_type='project', active=True)}
+    ctx = {
+        'projects': Project.objects.all().order_by('display_order'),
+        'categories': Category.objects.filter(category_type='project', active=True),
+        'service_categories': Category.objects.filter(category_type='service', active=True),
+    }
     return render(request, 'core/admin/projects.html', ctx)
 
 

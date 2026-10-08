@@ -127,7 +127,45 @@
       <p class="section-desc">Découvrez les projets que nous avons menés à bien</p>
     </div>
     <div class="card-grid">
-      {% for project in projects %}
+      {% for project in realisations %}
+      <div class="card animate delay-{{ forloop.counter }}">
+        {% if project.image %}
+        <img src="{{ project.image.url }}" alt="{{ project.title }}" style="width:100%;height:200px;object-fit:cover;border-radius:14px;margin-bottom:20px">
+        {% endif %}
+        <span class="tag" style="margin-bottom:12px;display:inline-block">{{ project.service_category_display|default:project.category_display }}</span>
+        <h3>{{ project.title }}</h3>
+        <p>{{ project.description }}</p>
+        {% if project.tech_stack %}
+        <div class="card-tags">
+          {% for tech in project.tech_stack|split:"," %}
+          <span class="tag">{{ tech }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% if project.link %}
+        <a href="{{ project.link }}" target="_blank" rel="noopener" class="card-link">Voir le projet <i class="ri-arrow-right-line"></i></a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% if realisations %}
+    <div style="text-align:center;margin-top:48px">
+      <a href="/realisations/?cat=realisation" class="btn btn-outline">Toutes les réalisations <i class="ri-arrow-right-line"></i></a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if colabs %}
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label"><i class="ri-hand-heart-line"></i> Collaborations</div>
+      <h2 class="section-title">Partenariats & collaborations</h2>
+      <p class="section-desc">Les projets que nous menons avec nos partenaires</p>
+    </div>
+    <div class="card-grid">
+      {% for project in colabs %}
       <div class="card animate delay-{{ forloop.counter }}">
         {% if project.image %}
         <img src="{{ project.image.url }}" alt="{{ project.title }}" style="width:100%;height:200px;object-fit:cover;border-radius:14px;margin-bottom:20px">
@@ -148,13 +186,12 @@
       </div>
       {% endfor %}
     </div>
-    {% if projects %}
     <div style="text-align:center;margin-top:48px">
-      <a href="/realisations/" class="btn btn-outline">Toutes les réalisations <i class="ri-arrow-right-line"></i></a>
+      <a href="/realisations/?cat=partenariat" class="btn btn-outline">Voir les collaborations <i class="ri-arrow-right-line"></i></a>
     </div>
-    {% endif %}
   </div>
 </section>
+{% endif %}
 
 <section class="section pillars-section">
   <div class="container">

@@ -25,20 +25,21 @@
     {% if messages %}{% for msg in messages %}<div class="alert alert-success"><i class="ri-check-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
     <div class="admin-table">
       <table>
-        <thead><tr><th>Photo</th><th>Titre</th><th>Catégorie</th><th>Tech Stack</th><th>Lien</th><th>Ordre</th><th>Actif</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Photo</th><th>Titre</th><th>Catégorie</th><th>Service</th><th>Tech Stack</th><th>Lien</th><th>Ordre</th><th>Actif</th><th>Actions</th></tr></thead>
         <tbody>
           {% for p in projects %}
           <tr>
             <td>{% if p.image %}<img src="{{ p.image.url }}" alt="" style="width:50px;height:50px;object-fit:cover;border-radius:6px">{% else %}<span style="color:var(--c-text2)">—</span>{% endif %}</td>
             <td style="font-weight:600">{{ p.title }}</td>
             <td><span class="tag">{{ p.category_display|default:"—" }}</span></td>
+            <td><span class="tag">{{ p.service_category_display|default:"—" }}</span></td>
             <td>{{ p.tech_stack|default:"—" }}</td>
             <td>{% if p.link %}<a href="{{ p.link }}" target="_blank"><i class="ri-external-link-line"></i></a>{% endif %}</td>
             <td>{{ p.display_order }}</td>
             <td>{% if p.active %}✅{% else %}❌{% endif %}</td>
             <td>
               <div class="admin-actions">
-                <button class="btn btn-sm btn-ghost" onclick="editProject({{ p.id }},'{{ p.title|escapejs }}','{{ p.description|escapejs }}',{{ p.category_id|default:'null' }},'{{ p.link|default:'' }}','{{ p.tech_stack|default:''|escapejs }}',{{ p.display_order }},{% if p.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
+                <button class="btn btn-sm btn-ghost" onclick="editProject({{ p.id }},'{{ p.title|escapejs }}','{{ p.description|escapejs }}',{{ p.category_id|default:'null' }},{{ p.service_category_id|default:'null' }},'{{ p.link|default:'' }}','{{ p.tech_stack|default:''|escapejs }}',{{ p.display_order }},{% if p.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
                 <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ p.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer ?')"><i class="ri-delete-bin-line"></i></button></form>
               </div>
             </td>
@@ -59,6 +60,7 @@
             <div class="form-group"><label>Titre</label><input type="text" name="title" required></div>
             <div class="form-group"><label>Description</label><textarea name="description" required></textarea></div>
             <div class="form-group"><label>Catégorie</label><select name="category">{% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
+            <div class="form-group"><label>Service lié</label><select name="service_category"><option value="">— Aucun —</option>{% for cat in service_categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
             <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
             <div class="form-group"><label>Tech Stack (séparé par virgules)</label><input type="text" name="tech_stack" placeholder="Django, React, PostgreSQL"></div>
             <div class="form-group"><label>Lien externe</label><input type="url" name="link" placeholder="https://..."></div>
@@ -79,6 +81,7 @@
             <div class="form-group"><label>Titre</label><input type="text" name="title" id="edit_title" required></div>
             <div class="form-group"><label>Description</label><textarea name="description" id="edit_desc" required></textarea></div>
             <div class="form-group"><label>Catégorie</label><select name="category" id="edit_cat">{% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
+            <div class="form-group"><label>Service lié</label><select name="service_category" id="edit_svc_cat"><option value="">— Aucun —</option>{% for cat in service_categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
             <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
             <div class="form-group"><label>Tech Stack</label><input type="text" name="tech_stack" id="edit_tech"></div>
             <div class="form-group"><label>Lien</label><input type="url" name="link" id="edit_link"></div>
@@ -92,11 +95,12 @@
   </main>
 </div>
 <script>
-function editProject(id,title,desc,cat,link,tech,order,active){
+function editProject(id,title,desc,cat,svcCat,link,tech,order,active){
   document.getElementById('edit_id').value=id;
   document.getElementById('edit_title').value=title;
   document.getElementById('edit_desc').value=desc;
   if(cat) document.getElementById('edit_cat').value=cat;
+  document.getElementById('edit_svc_cat').value=svcCat || '';
   document.getElementById('edit_link').value=link;
   document.getElementById('edit_tech').value=tech;
   document.getElementById('edit_order').value=order;
