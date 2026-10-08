@@ -21,7 +21,7 @@ def index(request):
     colabs = Project.objects.filter(active=True, category__slug__in=['partenariat', 'collaboration'])
     context = {
         'hero': Hero.objects.filter(active=True).first(),
-        'services': Service.objects.filter(active=True)[:6],
+        'services': Service.objects.filter(active=True, featured=True)[:3],
         'service_categories': list(Category.objects.filter(category_type='service', active=True).values('slug', 'name')),
         'realisations': realisations[:6],
         'colabs': colabs[:6],
@@ -177,6 +177,7 @@ def admin_services(request):
                 link=request.POST.get('link', ''),
                 image=request.FILES.get('image'),
                 display_order=int(request.POST.get('display_order', 0)),
+                featured='featured' in request.POST,
             )
             messages.success(request, 'Service créé.')
         elif action == 'update':
@@ -191,6 +192,7 @@ def admin_services(request):
                 s.image = request.FILES['image']
             s.display_order = int(request.POST.get('display_order', 0))
             s.active = 'active' in request.POST
+            s.featured = 'featured' in request.POST
             s.save()
             messages.success(request, 'Service mis à jour.')
         elif action == 'delete':

@@ -25,26 +25,27 @@
     {% if messages %}{% for msg in messages %}<div class="alert alert-success"><i class="ri-check-line"></i> {{ msg }}</div>{% endfor %}{% endif %}
     <div class="admin-table">
       <table>
-        <thead><tr><th>Photo</th><th>Titre</th><th>Catégorie</th><th>Icône</th><th>Lien</th><th>Ordre</th><th>Actif</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Photo</th><th>Titre</th><th>Catégorie</th><th>Accueil</th><th>Icône</th><th>Lien</th><th>Ordre</th><th>Actif</th><th>Actions</th></tr></thead>
         <tbody>
           {% for s in services %}
           <tr>
             <td>{% if s.image %}<img src="{{ s.image.url }}" alt="" style="width:50px;height:50px;object-fit:cover;border-radius:6px">{% else %}<span style="color:var(--c-text2)">—</span>{% endif %}</td>
             <td style="font-weight:600">{{ s.title }}</td>
             <td><span class="tag">{{ s.category_display|default:"—" }}</span></td>
+            <td>{% if s.featured %}⭐{% else %}—{% endif %}</td>
             <td><i class="{{ s.icon }}"></i></td>
             <td>{% if s.link %}<a href="{{ s.link }}" target="_blank"><i class="ri-external-link-line"></i></a>{% endif %}</td>
             <td>{{ s.display_order }}</td>
             <td>{% if s.active %}✅{% else %}❌{% endif %}</td>
             <td>
               <div class="admin-actions">
-                <button class="btn btn-sm btn-ghost" onclick="editService({{ s.id }},'{{ s.title|escapejs }}','{{ s.description|escapejs }}','{{ s.objective|default:''|escapejs }}',{{ s.category_id|default:'null' }},'{{ s.icon }}','{{ s.link|default:'' }}',{{ s.display_order }},{% if s.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
+                <button class="btn btn-sm btn-ghost" onclick="editService({{ s.id }},'{{ s.title|escapejs }}','{{ s.description|escapejs }}','{{ s.objective|default:''|escapejs }}',{{ s.category_id|default:'null' }},'{{ s.icon }}','{{ s.link|default:'' }}',{{ s.display_order }},{% if s.active %}1{% else %}0{% endif %},{% if s.featured %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
                 <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ s.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer ?')"><i class="ri-delete-bin-line"></i></button></form>
               </div>
             </td>
           </tr>
           {% empty %}
-          <tr><td colspan="8" style="text-align:center;color:var(--c-text2);padding:32px">Aucun service.</td></tr>
+          <tr><td colspan="9" style="text-align:center;color:var(--c-text2);padding:32px">Aucun service.</td></tr>
           {% endfor %}
         </tbody>
       </table>
@@ -64,6 +65,7 @@
             <div class="form-group"><label>Icône (RemixIcon)</label><input type="text" name="icon" value="ri-briefcase-line" placeholder="ri-code-line"></div>
             <div class="form-group"><label>Lien externe</label><input type="url" name="link" placeholder="https://..."></div>
             <div class="form-group"><label>Ordre</label><input type="number" name="display_order" value="0"></div>
+            <div class="form-group"><label><input type="checkbox" name="featured"> ⭐ Mettre en avant sur la page d'accueil (3 max)</label></div>
           </div>
           <div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="document.getElementById('modal').style.display='none'">Annuler</button><button type="submit" class="btn btn-primary">Créer</button></div>
         </form>
@@ -86,6 +88,7 @@
             <div class="form-group"><label>Lien</label><input type="url" name="link" id="edit_link"></div>
             <div class="form-group"><label>Ordre</label><input type="number" name="display_order" id="edit_order"></div>
             <div class="form-group"><label><input type="checkbox" name="active" id="edit_active" checked> Actif</label></div>
+            <div class="form-group"><label><input type="checkbox" name="featured" id="edit_featured"> ⭐ Mettre en avant sur la page d'accueil (3 max)</label></div>
           </div>
           <div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="document.getElementById('editModal').style.display='none'">Annuler</button><button type="submit" class="btn btn-primary">Modifier</button></div>
         </form>
@@ -94,7 +97,7 @@
   </main>
 </div>
 <script>
-function editService(id,title,desc,objective,cat,icon,link,order,active){
+function editService(id,title,desc,objective,cat,icon,link,order,active,featured){
   document.getElementById('edit_id').value=id;
   document.getElementById('edit_title').value=title;
   document.getElementById('edit_desc').value=desc;
@@ -104,6 +107,7 @@ function editService(id,title,desc,objective,cat,icon,link,order,active){
   document.getElementById('edit_link').value=link;
   document.getElementById('edit_order').value=order;
   document.getElementById('edit_active').checked=active==1;
+  document.getElementById('edit_featured').checked=featured==1;
   document.getElementById('editModal').style.display='flex';
 }
 </script>

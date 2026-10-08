@@ -30,6 +30,7 @@ class Service(models.Model):
     image = models.ImageField(upload_to='services/', blank=True, null=True)
     display_order = models.IntegerField(default=0)
     active = models.BooleanField(default=True)
+    featured = models.BooleanField(default=False, verbose_name='Mis en avant (accueil)')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
