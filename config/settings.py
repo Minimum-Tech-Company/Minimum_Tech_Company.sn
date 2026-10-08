@@ -110,18 +110,20 @@ STORAGES = {
 # Media files → Supabase Storage (S3-compatible API) when configured.
 # Vercel has no persistent disk, so uploads must live in object storage.
 if os.environ.get('SUPABASE_S3_ENDPOINT') and os.environ.get('SUPABASE_STORAGE_BUCKET'):
+    _s3_options = {
+        'endpoint_url': os.environ['SUPABASE_S3_ENDPOINT'],
+        'bucket_name': os.environ['SUPABASE_STORAGE_BUCKET'],
+        'region_name': os.environ.get('SUPABASE_S3_REGION', 'us-east-1'),
+        'default_acl': None,
+        'querystring_auth': False,
+        'addressing_style': 'path',
+        'file_overwrite': False,
+    }
+    if os.environ.get('SUPABASE_S3_CUSTOM_DOMAIN'):
+        _s3_options['custom_domain'] = os.environ['SUPABASE_S3_CUSTOM_DOMAIN']
     STORAGES['default'] = {
-        'BACKEND': 'storages.backends.s3boto3.S3Storage',
-        'OPTIONS': {
-            'endpoint_url': os.environ['SUPABASE_S3_ENDPOINT'],
-            'bucket_name': os.environ['SUPABASE_STORAGE_BUCKET'],
-            'region_name': os.environ.get('SUPABASE_S3_REGION', 'us-east-1'),
-            'default_acl': 'public-read',
-            'querystring_auth': False,
-            'addressing_style': 'path',
-            'custom_domain': os.environ.get('SUPABASE_S3_CUSTOM_DOMAIN') or None,
-            'file_overwrite': False,
-        },
+        'BACKEND': 'config.storage.SupabasePublicStorage',
+        'OPTIONS': _s3_options,
     }
 
 REST_FRAMEWORK = {
