@@ -186,6 +186,29 @@ body:not(.home) .nav:not(.scrolled) {
   position: relative;
   padding: 120px 24px 80px;
   overflow: hidden;
+  background: var(--c-bg);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.hero-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(135deg, rgba(6,6,10,0.88), rgba(6,6,10,0.75));
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg video { display: none; }
 }
 .hero::before {
   content: '';
@@ -193,6 +216,7 @@ body:not(.home) .nav:not(.scrolled) {
   top: 0; left: 0; right: 0; bottom: 0;
   background: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(59,110,245,0.10), transparent);
   pointer-events: none;
+  z-index: 1;
 }
 .hero-inner {
   max-width: 1200px;
