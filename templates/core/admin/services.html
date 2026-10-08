@@ -38,7 +38,7 @@
             <td>{% if s.active %}✅{% else %}❌{% endif %}</td>
             <td>
               <div class="admin-actions">
-                <button class="btn btn-sm btn-ghost" onclick="editService({{ s.id }},'{{ s.title|escapejs }}','{{ s.description|escapejs }}',{{ s.category_id|default:'null' }},'{{ s.icon }}','{{ s.link|default:'' }}',{{ s.display_order }},{% if s.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
+                <button class="btn btn-sm btn-ghost" onclick="editService({{ s.id }},'{{ s.title|escapejs }}','{{ s.description|escapejs }}','{{ s.objective|default:''|escapejs }}',{{ s.category_id|default:'null' }},'{{ s.icon }}','{{ s.link|default:'' }}',{{ s.display_order }},{% if s.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
                 <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ s.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer ?')"><i class="ri-delete-bin-line"></i></button></form>
               </div>
             </td>
@@ -59,6 +59,7 @@
             <div class="form-group"><label>Titre</label><input type="text" name="title" required></div>
             <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
             <div class="form-group"><label>Description</label><textarea name="description" required></textarea></div>
+            <div class="form-group"><label>Objectif</label><textarea name="objective" placeholder="L'objectif de ce service..."></textarea></div>
             <div class="form-group"><label>Catégorie</label><select name="category">{% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
             <div class="form-group"><label>Icône (RemixIcon)</label><input type="text" name="icon" value="ri-briefcase-line" placeholder="ri-code-line"></div>
             <div class="form-group"><label>Lien externe</label><input type="url" name="link" placeholder="https://..."></div>
@@ -79,6 +80,7 @@
             <div class="form-group"><label>Titre</label><input type="text" name="title" id="edit_title" required></div>
             <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
             <div class="form-group"><label>Description</label><textarea name="description" id="edit_desc" required></textarea></div>
+            <div class="form-group"><label>Objectif</label><textarea name="objective" id="edit_objective"></textarea></div>
             <div class="form-group"><label>Catégorie</label><select name="category" id="edit_cat">{% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
             <div class="form-group"><label>Icône</label><input type="text" name="icon" id="edit_icon"></div>
             <div class="form-group"><label>Lien</label><input type="url" name="link" id="edit_link"></div>
@@ -92,10 +94,11 @@
   </main>
 </div>
 <script>
-function editService(id,title,desc,cat,icon,link,order,active){
+function editService(id,title,desc,objective,cat,icon,link,order,active){
   document.getElementById('edit_id').value=id;
   document.getElementById('edit_title').value=title;
   document.getElementById('edit_desc').value=desc;
+  document.getElementById('edit_objective').value=objective;
   document.getElementById('edit_cat').value=cat;
   document.getElementById('edit_icon').value=icon;
   document.getElementById('edit_link').value=link;

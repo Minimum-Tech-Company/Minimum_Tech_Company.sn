@@ -23,6 +23,7 @@ class Category(models.Model):
 class Service(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
+    objective = models.TextField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='services')
     icon = models.CharField(max_length=50, default='ri-briefcase-line')
     link = models.URLField(blank=True, null=True)

@@ -168,6 +168,7 @@ def admin_services(request):
             Service.objects.create(
                 title=request.POST['title'],
                 description=request.POST['description'],
+                objective=request.POST.get('objective', ''),
                 category_id=request.POST.get('category') or None,
                 icon=request.POST.get('icon', 'ri-briefcase-line'),
                 link=request.POST.get('link', ''),
@@ -179,6 +180,7 @@ def admin_services(request):
             s = Service.objects.get(id=request.POST['id'])
             s.title = request.POST['title']
             s.description = request.POST['description']
+            s.objective = request.POST.get('objective', '')
             s.category_id = request.POST.get('category') or None
             s.icon = request.POST.get('icon', 'ri-briefcase-line')
             s.link = request.POST.get('link', '')
