@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Projets Futurs — Minimum Tech{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Projets Futurs" %} — Minimum Tech{% endblock %}
 {% block content %}
 <div class="mesh-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
 <div class="page-hero">
-  <h1>Projets Futurs</h1>
-  <p>Découvrez les innovations que nous préparons</p>
+  <h1>{% trans "Projets Futurs" %}</h1>
+  <p>{% trans "Découvrez les innovations que nous préparons" %}</p>
 </div>
 <section class="section">
   <div class="container">
@@ -20,11 +21,11 @@
         <p style="margin-top:12px;color:var(--c-accent);font-size:0.9rem;font-weight:600"><i class="ri-calendar-line"></i> {{ project.expected_date }}</p>
         {% endif %}
         {% if project.link %}
-        <a href="{{ project.link }}" target="_blank" rel="noopener" class="card-link">En savoir plus <i class="ri-arrow-right-line"></i></a>
+        <a href="{{ project.link }}" target="_blank" rel="noopener" class="card-link">{% trans "En savoir plus" %} <i class="ri-arrow-right-line"></i></a>
         {% endif %}
       </div>
       {% empty %}
-      <div class="empty-state" style="grid-column:1/-1"><i class="ri-inbox-line"></i><p>Aucun projet futur annoncé.</p></div>
+      <div class="empty-state" style="grid-column:1/-1"><i class="ri-inbox-line"></i><p>{% trans "Aucun projet futur annoncé." %}</p></div>
       {% endfor %}
     </div>
   </div>

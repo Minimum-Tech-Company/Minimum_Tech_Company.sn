@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}{{ post.title }} — Minimum Tech{% endblock %}
 {% block content %}
 <div class="mesh-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
@@ -17,8 +18,8 @@
     <div class="content">{{ post.content }}</div>
   </div>
   {% if post.link %}
-  <a href="{{ post.link }}" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:24px"><i class="ri-external-link-line"></i> Voir la source externe</a>
+  <a href="{{ post.link }}" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:24px"><i class="ri-external-link-line"></i> {% trans "Voir la source externe" %}</a>
   {% endif %}
-  <div style="margin-top:32px"><a href="/blog/" class="card-link"><i class="ri-arrow-left-line"></i> Retour au blog</a></div>
+  <div style="margin-top:32px"><a href="/blog/" class="card-link"><i class="ri-arrow-left-line"></i> {% trans "Retour au blog" %}</a></div>
 </div>
 {% endblock %}

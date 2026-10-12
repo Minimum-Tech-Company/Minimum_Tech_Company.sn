@@ -1,0 +1,298 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Minimum Tech 1.0\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Accueil"
+msgstr "Home"
+
+msgid "Adresse"
+msgstr "Address"
+
+msgid "Améliorations"
+msgstr "Improvements"
+
+msgid "Aucun article pour le moment."
+msgstr "No article yet."
+
+msgid "Aucun projet de recherche publié pour le moment."
+msgstr "No research project published yet."
+
+msgid "Aucun projet futur annoncé."
+msgstr "No upcoming project announced."
+
+msgid "Aucun service dans cette catégorie."
+msgstr "No service in this category."
+
+msgid "Aucune réalisation pour le moment."
+msgstr "No projects yet."
+
+msgid "Blog"
+msgstr "Blog"
+
+msgid "Blog & Recherches"
+msgstr "Blog & Research"
+
+msgid "But de la recherche"
+msgstr "Research goal"
+
+msgid "Changer de theme"
+msgstr "Toggle theme"
+
+msgid "Collaborations"
+msgstr "Collaborations"
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid ""
+"Contactez-nous pour discuter de vos besoins et obtenir une solution sur "
+"mesure."
+msgstr "Contact us to discuss your needs and get a tailored solution."
+
+msgid "Contexte"
+msgstr "Context"
+
+msgid "Contexte de la recherche"
+msgstr "Research context"
+
+msgid "Data • AI and ML • Développement • Recherche"
+msgstr "Data • AI and ML • Development • Research"
+
+msgid ""
+"Des prestations complètes pour répondre à tous vos besoins technologiques"
+msgstr "Complete services to meet all your technology needs"
+
+msgid "Des solutions sur mesure"
+msgstr "Tailored solutions"
+
+msgid "Des solutions technologiques complètes pour propulser votre entreprise"
+msgstr "Complete technology solutions to propel your business"
+
+msgid "Description"
+msgstr "Description"
+
+msgid ""
+"Données, développement web, formations : chaque projet que nous menons "
+"traduit cette vision en résultats mesurables pour nos clients et notre "
+"communauté."
+msgstr ""
+"Data, web development, training: every project we undertake turns this "
+"vision into measurable results for our clients and our community."
+
+msgid "Découvrez les innovations que nous préparons"
+msgstr "Discover the innovations we are preparing"
+
+msgid "Découvrez les projets que nous avons menés à bien"
+msgstr "Discover the projects we have successfully delivered"
+
+msgid "Découvrez nos réalisations et collaborations"
+msgstr "Discover our projects and collaborations"
+
+msgid "Démarrer un projet"
+msgstr "Start a project"
+
+msgid "En savoir plus"
+msgstr "Learn more"
+
+msgid "Envoyer"
+msgstr "Send"
+
+msgid "Envoyez-nous un message"
+msgstr "Send us a message"
+
+msgid "Explorations et travaux de R&D en cours chez Minimum Tech"
+msgstr "Ongoing explorations and R&D work at Minimum Tech"
+
+msgid "Explorez nos articles sur les dernières innovations technologiques"
+msgstr "Explore our articles on the latest technological innovations"
+
+msgid "Innovation Technologique"
+msgstr "Technological Innovation"
+
+msgid "Les projets que nous menons avec nos partenaires"
+msgstr "The projects we run with our partners"
+
+msgid "Lire l'article"
+msgstr "Read article"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "Navigation"
+msgstr "Navigation"
+
+msgid "Nom complet"
+msgstr "Full name"
+
+msgid "Nos Réalisations"
+msgstr "Our Projects"
+
+msgid "Nos Services"
+msgstr "Our Services"
+
+msgid "Nos coordonnées"
+msgstr "Our contact details"
+
+msgid "Nos projets"
+msgstr "Our projects"
+
+msgid "Nos projets de recherche"
+msgstr "Our research projects"
+
+msgid "Nos technologies"
+msgstr "Our technologies"
+
+msgid "Nous contacter"
+msgstr "Contact us"
+
+msgid ""
+"Nous investissons dans la recherche appliquée en intelligence artificielle "
+"et en robotique, pour concevoir des solutions de demain dès aujourd'hui et "
+"rester à la pointe de l'innovation."
+msgstr ""
+"We invest in applied research in artificial intelligence and robotics, to "
+"design tomorrow's solutions today and stay at the cutting edge of "
+"innovation."
+
+msgid "Nous sommes à votre écoute"
+msgstr "We are listening"
+
+msgid ""
+"Nous œuvrons à bâtir un écosystème technologique local : startups, talents "
+"et institutions réunis autour d'une même ambition — faire du Senegal un "
+"acteur de l'innovation numérique en Afrique."
+msgstr ""
+"We work to build a local technological ecosystem: startups, talent and "
+"institutions united around a single ambition — making Senegal a player in "
+"digital innovation in Africa."
+
+msgid "Objectif"
+msgstr "Objective"
+
+msgid "Où en sommes-nous ?"
+msgstr "Where are we now?"
+
+msgid "Partenariats & collaborations"
+msgstr "Partnerships & collaborations"
+
+msgid "Pistes d'amélioration"
+msgstr "Areas for improvement"
+
+msgid "Plus qu'une entreprise,<br>une vocation."
+msgstr "More than a company,<br>a calling."
+
+msgid "Pourquoi Minimum Tech"
+msgstr "Why Minimum Tech"
+
+msgid "Programmes de Recherche"
+msgstr "Research Programs"
+
+msgid "Projets & Partenariats"
+msgstr "Projects & Partnerships"
+
+msgid "Projets Futurs"
+msgstr "Future Projects"
+
+msgid "Prêt à démarrer votre projet ?"
+msgstr "Ready to start your project?"
+
+msgid "Recherche"
+msgstr "Research"
+
+msgid "Recherche en IA &amp; robotique"
+msgstr "AI &amp; robotics research"
+
+msgid "Retour au blog"
+msgstr "Back to blog"
+
+msgid "Retour aux services"
+msgstr "Back to services"
+
+msgid "Retour à l'accueil"
+msgstr "Back to home"
+
+msgid "Réalisations"
+msgstr "Projects"
+
+msgid "Résultats"
+msgstr "Results"
+
+msgid "Résultats obtenus"
+msgstr "Results achieved"
+
+msgid "Services"
+msgstr "Services"
+
+msgid "Solutions Technologiques"
+msgstr "Technology Solutions"
+
+msgid "Source externe"
+msgstr "External source"
+
+msgid "Sujet"
+msgstr "Subject"
+
+msgid "Sujet du message"
+msgstr "Message subject"
+
+msgid "Tous"
+msgstr "All"
+
+msgid "Toutes"
+msgstr "All"
+
+msgid "Toutes les réalisations"
+msgstr "All projects"
+
+msgid "Transformez votre vision en"
+msgstr "Turn your vision into"
+
+msgid "Téléphone"
+msgstr "Phone"
+
+msgid "Un impact concret"
+msgstr "A concrete impact"
+
+msgid "Un écosystème technologique"
+msgstr "A technological ecosystem"
+
+msgid "Veuillez remplir tous les champs obligatoires."
+msgstr "Please fill in all required fields."
+
+msgid "Voir la source externe"
+msgstr "View external source"
+
+msgid "Voir le projet"
+msgstr "View project"
+
+msgid "Voir les collaborations"
+msgstr "See collaborations"
+
+msgid "Voir plus"
+msgstr "See more"
+
+msgid "Voir plus en détail"
+msgstr "See more details"
+
+msgid "Voir tous les services"
+msgstr "See all services"
+
+msgid "Votre message a été envoyé avec succès !"
+msgstr "Your message has been sent successfully!"
+
+msgid "Votre message..."
+msgstr "Your message..."
+
+msgid "Votre nom"
+msgstr "Your name"
+
+msgid "réalité numérique"
+msgstr "digital reality"
+
+msgid "État actuel"
+msgstr "Current state"

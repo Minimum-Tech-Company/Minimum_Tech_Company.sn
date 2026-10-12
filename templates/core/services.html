@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
-{% block title %}Services — Minimum Tech{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Services" %} — Minimum Tech{% endblock %}
 {% block content %}
 <div class="mesh-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
 <div class="page-hero">
-  <h1>Nos Services</h1>
-  <p>Des solutions technologiques complètes pour propulser votre entreprise</p>
+  <h1>{% trans "Nos Services" %}</h1>
+  <p>{% trans "Des solutions technologiques complètes pour propulser votre entreprise" %}</p>
 </div>
 <section class="section">
   <div class="container">
     <div class="cat-filter">
-      <a href="/services/" class="{% if not current_category %}active{% endif %}">Tous</a>
+      <a href="/services/" class="{% if not current_category %}active{% endif %}">{% trans "Tous" %}</a>
       {% for cat in categories %}
       <a href="/services/?cat={{ cat.slug }}" class="{% if current_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
       {% endfor %}
@@ -24,10 +25,10 @@
         <span class="tag" style="margin-bottom:12px;display:inline-block">{{ service.category_display }}</span>
         <h3>{{ service.title }}</h3>
         <p>{{ service.description }}</p>
-        <a href="/services/{{ service.pk }}/" class="card-link">En savoir plus <i class="ri-arrow-right-line"></i></a>
+        <a href="/services/{{ service.pk }}/" class="card-link">{% trans "En savoir plus" %} <i class="ri-arrow-right-line"></i></a>
       </div>
       {% empty %}
-      <div class="empty-state" style="grid-column:1/-1"><i class="ri-inbox-line"></i><p>Aucun service dans cette catégorie.</p></div>
+      <div class="empty-state" style="grid-column:1/-1"><i class="ri-inbox-line"></i><p>{% trans "Aucun service dans cette catégorie." %}</p></div>
       {% endfor %}
     </div>
   </div>

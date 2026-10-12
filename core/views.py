@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.cache import cache
+from django.utils.translation import gettext_lazy as _
 from .models import Category, Service, Project, FutureProject, ResearchProject, BlogPost, Hero, CompanyInfo, ContactMessage
 
 MAX_LOGIN_ATTEMPTS = 3
@@ -107,10 +108,10 @@ def contact_page(request):
         message_text = request.POST.get('message')
         if name and email and message_text:
             ContactMessage.objects.create(name=name, email=email, subject=subject, message=message_text)
-            messages.success(request, 'Votre message a été envoyé avec succès !')
+            messages.success(request, _('Votre message a été envoyé avec succès !'))
             return redirect('contact')
         else:
-            messages.error(request, 'Veuillez remplir tous les champs obligatoires.')
+            messages.error(request, _('Veuillez remplir tous les champs obligatoires.'))
     context = {'company': get_company_info()}
     return render(request, 'core/contact.html', context)
 

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load split_tags %}
+{% load split_tags i18n %}
 {% block title %}{{ service.title }} — Minimum Tech{% endblock %}
 {% block content %}
 <div class="mesh-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
@@ -17,31 +17,31 @@
       <h2 style="margin:0;font-size:1.4rem">{{ service.title }}</h2>
     </div>
     <div style="margin-bottom:28px">
-      <h3 style="display:flex;align-items:center;gap:8px;font-size:1.1rem;margin-bottom:12px"><i class="ri-file-text-line" style="color:var(--c-primary)"></i> Description</h3>
+      <h3 style="display:flex;align-items:center;gap:8px;font-size:1.1rem;margin-bottom:12px"><i class="ri-file-text-line" style="color:var(--c-primary)"></i> {% trans "Description" %}</h3>
       <div class="content">{{ service.description|linebreaks }}</div>
     </div>
     {% if service.objective %}
     <div>
-      <h3 style="display:flex;align-items:center;gap:8px;font-size:1.1rem;margin-bottom:12px"><i class="ri-target-line" style="color:var(--c-primary)"></i> Objectif</h3>
+      <h3 style="display:flex;align-items:center;gap:8px;font-size:1.1rem;margin-bottom:12px"><i class="ri-target-line" style="color:var(--c-primary)"></i> {% trans "Objectif" %}</h3>
       <div class="content">{{ service.objective|linebreaks }}</div>
     </div>
     {% endif %}
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:32px;align-items:center">
-    <a href="/contact/?service={{ service.title|urlencode }}" class="btn btn-primary"><i class="ri-message-3-line"></i> Nous contacter</a>
+    <a href="/contact/?service={{ service.title|urlencode }}" class="btn btn-primary"><i class="ri-message-3-line"></i> {% trans "Nous contacter" %}</a>
     {% if service.link %}
-    <a href="{{ service.link }}" target="_blank" rel="noopener" class="btn btn-outline"><i class="ri-external-link-line"></i> Voir plus en détail</a>
+    <a href="{{ service.link }}" target="_blank" rel="noopener" class="btn btn-outline"><i class="ri-external-link-line"></i> {% trans "Voir plus en détail" %}</a>
     {% endif %}
   </div>
-  <div style="margin-top:32px"><a href="/services/" class="card-link"><i class="ri-arrow-left-line"></i> Retour aux services</a></div>
+  <div style="margin-top:32px"><a href="/services/" class="card-link"><i class="ri-arrow-left-line"></i> {% trans "Retour aux services" %}</a></div>
 </div>
 {% if projects %}
 <section class="section">
   <div class="container">
     <div class="section-header">
-      <div class="section-label"><i class="ri-award-line"></i> Nos Réalisations</div>
-      <h2 class="section-title">Projets & Partenariats</h2>
-      <p class="section-desc">Découvrez nos réalisations et collaborations</p>
+      <div class="section-label"><i class="ri-award-line"></i> {% trans "Nos Réalisations" %}</div>
+      <h2 class="section-title">{% trans "Projets & Partenariats" %}</h2>
+      <p class="section-desc">{% trans "Découvrez nos réalisations et collaborations" %}</p>
     </div>
     <div class="card-grid">
       {% for project in projects %}
@@ -56,7 +56,7 @@
         <div class="card-tags">{% for tech in project.tech_stack|split:"," %}<span class="tag">{{ tech }}</span>{% endfor %}</div>
         {% endif %}
         {% if project.link %}
-        <a href="{{ project.link }}" target="_blank" rel="noopener" class="card-link">Voir le projet <i class="ri-arrow-right-line"></i></a>
+        <a href="{{ project.link }}" target="_blank" rel="noopener" class="card-link">{% trans "Voir le projet" %} <i class="ri-arrow-right-line"></i></a>
         {% endif %}
       </div>
       {% endfor %}

@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %}Recherche — Minimum Tech{% endblock %}
+{% load static i18n %}
+{% block title %}{% trans "Recherche" %} — Minimum Tech{% endblock %}
 
 {% block content %}
 <div class="mesh-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div></div>
 
 <div class="page-hero">
-  <div class="section-label" style="margin-bottom:16px"><i class="ri-microscope-line"></i> Programmes de Recherche</div>
-  <h1>Nos projets de recherche</h1>
-  <p>Explorations et travaux de R&amp;D en cours chez Minimum Tech</p>
+  <div class="section-label" style="margin-bottom:16px"><i class="ri-microscope-line"></i> {% trans "Programmes de Recherche" %}</div>
+  <h1>{% trans "Nos projets de recherche" %}</h1>
+  <p>{% trans "Explorations et travaux de R&D en cours chez Minimum Tech" %}</p>
 </div>
 
 {% if research_projects %}
@@ -25,46 +25,46 @@
       {% if research.subtitle %}<p style="color:var(--c-text2);margin-bottom:24px">{{ research.subtitle }}</p>{% endif %}
 
       <div class="research-card" style="margin-bottom:24px">
-        <div class="research-card-label"><i class="ri-focus-3-line"></i> Contexte</div>
-        <h4>Contexte de la recherche</h4>
+        <div class="research-card-label"><i class="ri-focus-3-line"></i> {% trans "Contexte" %}</div>
+        <h4>{% trans "Contexte de la recherche" %}</h4>
         <p style="margin-top:8px">{{ research.context }}</p>
       </div>
 
       {% if research.goal %}
       <div class="research-card" style="margin-bottom:24px">
-        <div class="research-card-label"><i class="ri-flag-line"></i> Objectif</div>
-        <h4>But de la recherche</h4>
+        <div class="research-card-label"><i class="ri-flag-line"></i> {% trans "Objectif" %}</div>
+        <h4>{% trans "But de la recherche" %}</h4>
         <p style="margin-top:8px">{{ research.goal }}</p>
       </div>
       {% endif %}
 
       {% if research.current_state %}
       <div class="research-card" style="margin-bottom:24px">
-        <div class="research-card-label"><i class="ri-pulse-line"></i> État actuel</div>
-        <h4>Où en sommes-nous ?</h4>
+        <div class="research-card-label"><i class="ri-pulse-line"></i> {% trans "État actuel" %}</div>
+        <h4>{% trans "Où en sommes-nous ?" %}</h4>
         <p style="margin-top:8px">{{ research.current_state }}</p>
       </div>
       {% endif %}
 
       {% if research.results %}
       <div class="research-card" style="margin-bottom:24px">
-        <div class="research-card-label"><i class="ri-trophy-line"></i> Résultats</div>
-        <h4>Résultats obtenus</h4>
+        <div class="research-card-label"><i class="ri-trophy-line"></i> {% trans "Résultats" %}</div>
+        <h4>{% trans "Résultats obtenus" %}</h4>
         <p style="margin-top:8px">{{ research.results }}</p>
       </div>
       {% endif %}
 
       {% if research.improvements %}
       <div class="research-card" style="margin-bottom:24px">
-        <div class="research-card-label"><i class="ri-rocket-line"></i> Améliorations</div>
-        <h4>Pistes d'amélioration</h4>
+        <div class="research-card-label"><i class="ri-rocket-line"></i> {% trans "Améliorations" %}</div>
+        <h4>{% trans "Pistes d'amélioration" %}</h4>
         <p style="margin-top:8px">{{ research.improvements }}</p>
       </div>
       {% endif %}
 
       {% if research.link %}
       <a href="{{ research.link }}" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:16px">
-        <i class="ri-external-link-line"></i> Voir plus
+        <i class="ri-external-link-line"></i> {% trans "Voir plus" %}
       </a>
       {% endif %}
 
@@ -75,7 +75,7 @@
     {% endfor %}
 
     <div style="margin-top:24px">
-      <a href="/" class="card-link"><i class="ri-arrow-left-line"></i> Retour à l'accueil</a>
+      <a href="/" class="card-link"><i class="ri-arrow-left-line"></i> {% trans "Retour à l'accueil" %}</a>
     </div>
 
   </div>
@@ -83,8 +83,8 @@
 {% else %}
 <section class="section">
   <div class="container" style="text-align:center;max-width:600px">
-    <p style="color:var(--c-text2)">Aucun projet de recherche publié pour le moment.</p>
-    <a href="/" class="btn btn-outline" style="margin-top:16px"><i class="ri-arrow-left-line"></i> Retour à l'accueil</a>
+    <p style="color:var(--c-text2)">{% trans "Aucun projet de recherche publié pour le moment." %}</p>
+    <a href="/" class="btn btn-outline" style="margin-top:16px"><i class="ri-arrow-left-line"></i> {% trans "Retour à l'accueil" %}</a>
   </div>
 </section>
 {% endif %}

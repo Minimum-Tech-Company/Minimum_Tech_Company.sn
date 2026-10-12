@@ -1,6 +1,6 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="fr" data-theme="dark">
+<html lang="{{ LANGUAGE_CODE|default:'en' }}" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,15 +24,24 @@
                 <img src="{% static 'images/logo.png' %}" alt="Minimum Tech" class="logo-img">
             </a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Accueil</a></li>
-                <li><a href="/services/" class="{% if request.path|slice:':10' == '/services/' %}active{% endif %}">Services</a></li>
-                <li><a href="/realisations/" class="{% if request.path|slice:':15' == '/realisations/' %}active{% endif %}">Réalisations</a></li>
-                <li><a href="/recherche/" class="{% if request.path|slice:':11' == '/recherche/' %}active{% endif %}">Recherche</a></li>
-                <li><a href="/blog/" class="{% if request.path|slice:':6' == '/blog/' %}active{% endif %}">Blog</a></li>
-                <li><a href="/contact/" class="{% if request.path == '/contact/' %}active{% endif %}">Contact</a></li>
+                <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">{% trans "Accueil" %}</a></li>
+                <li><a href="/services/" class="{% if request.path|slice:':10' == '/services/' %}active{% endif %}">{% trans "Services" %}</a></li>
+                <li><a href="/realisations/" class="{% if request.path|slice:':15' == '/realisations/' %}active{% endif %}">{% trans "Réalisations" %}</a></li>
+                <li><a href="/recherche/" class="{% if request.path|slice:':11' == '/recherche/' %}active{% endif %}">{% trans "Recherche" %}</a></li>
+                <li><a href="/blog/" class="{% if request.path|slice:':6' == '/blog/' %}active{% endif %}">{% trans "Blog" %}</a></li>
+                <li><a href="/contact/" class="{% if request.path == '/contact/' %}active{% endif %}">{% trans "Contact" %}</a></li>
             </ul>
             <div style="display:flex;align-items:center;gap:8px">
-              <button class="theme-toggle" id="themeToggle" aria-label="Changer de theme">
+              {% get_current_language as CURRENT_LANG %}
+              <form action="{% url 'set_language' %}" method="post" style="display:inline;margin:0">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <div class="lang-switch">
+                  <button type="submit" name="language" value="en" class="lang-btn{% if CURRENT_LANG == 'en' %} active{% endif %}">EN</button>
+                  <button type="submit" name="language" value="fr" class="lang-btn{% if CURRENT_LANG == 'fr' %} active{% endif %}">FR</button>
+                </div>
+              </form>
+              <button class="theme-toggle" id="themeToggle" aria-label="{% trans 'Changer de theme' %}">
                 <i class="ri-sun-line" id="themeIcon"></i>
               </button>
               <button class="nav-toggle" id="navToggle" aria-label="Menu">
@@ -52,7 +61,8 @@
                     <a href="/" class="nav-logo">
                         <img src="{% static 'images/logo.png' %}" alt="Minimum Tech" class="logo-img">
                     </a>
-                    <p class="footer-desc">{{ company.company_description|default:"Solutions technologiques innovantes pour propulser votre entreprise." }}</p>
+                    {% trans "Solutions technologiques innovantes pour propulser votre entreprise." as footer_desc_default %}
+                    <p class="footer-desc">{{ company.company_description|default:footer_desc_default }}</p>
                     <div class="footer-social">
                         {% if company.linkedin_url %}<a href="{{ company.linkedin_url }}" target="_blank" rel="noopener"><i class="ri-linkedin-fill"></i></a>{% endif %}
                         {% if company.github_url %}<a href="{{ company.github_url }}" target="_blank" rel="noopener"><i class="ri-github-fill"></i></a>{% endif %}
@@ -65,21 +75,23 @@
                     </div>
                 </div>
                 <div class="footer-col">
-                    <h4>Navigation</h4>
-                    <a href="/services/">Services</a>
-                    <a href="/realisations/">Realisations</a>
-                    <a href="/recherche/">Recherche</a>
-                    <a href="/blog/">Blog</a>
+                    <h4>{% trans "Navigation" %}</h4>
+                    <a href="/services/">{% trans "Services" %}</a>
+                    <a href="/realisations/">{% trans "Réalisations" %}</a>
+                    <a href="/recherche/">{% trans "Recherche" %}</a>
+                    <a href="/blog/">{% trans "Blog" %}</a>
                 </div>
                 <div class="footer-col">
-                    <h4>Contact</h4>
+                    <h4>{% trans "Contact" %}</h4>
                     <a href="mailto:{{ company.company_email|default:'contact@minimumtech.com' }}"><i class="ri-mail-line"></i> {{ company.company_email|default:"contact@minimumtech.com" }}</a>
                     <a href="tel:{{ company.company_phone|default:'+243000000000' }}"><i class="ri-phone-line"></i> {{ company.company_phone|default:"+243 000 000 000" }}</a>
-                    <p><i class="ri-map-pin-line"></i> {{ company.company_address|default:"Kinshasa, RDC" }}</p>
+                    {% trans "Kinshasa, RDC" as default_address %}
+                    <p><i class="ri-map-pin-line"></i> {{ company.company_address|default:default_address }}</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>{{ company.footer_text|default:"2025 Minimum Tech. Tous droits reserves." }}</p>
+                {% trans "2025 Minimum Tech. Tous droits reserves." as footer_rights %}
+                <p>{{ company.footer_text|default:footer_rights }}</p>
             </div>
         </div>
     </footer>

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% load static split_tags %}
-{% block title %}Minimum Tech — Solutions Technologiques{% endblock %}
+{% load static split_tags i18n %}
+{% block title %}Minimum Tech — {% trans "Solutions Technologiques" %}{% endblock %}
 {% block body_class %}home{% endblock %}
 
 {% block content %}
@@ -19,26 +19,28 @@
   <div class="hero-overlay"></div>
   <div class="hero-inner">
     <div>
-      <div class="hero-badge animate"><span class="dot"></span> Innovation Technologique</div>
+      <div class="hero-badge animate"><span class="dot"></span> {% trans "Innovation Technologique" %}</div>
       <h1 class="animate delay-1">
-        {% if hero %}{{ hero.title }}{% else %}Transformez votre vision en{% endif %}
-        <br><span class="gradient">{% if hero %}{{ hero.subtitle }}{% else %}réalité numérique{% endif %}</span>
+        {% if hero %}{{ hero.title }}{% else %}{% trans "Transformez votre vision en" %}{% endif %}
+        <br><span class="gradient">{% if hero %}{{ hero.subtitle }}{% else %}{% trans "réalité numérique" %}{% endif %}</span>
       </h1>
       <p class="hero-desc animate delay-2">
-        {{ hero.description|default:company.company_description|default:"Nous concevons des solutions numériques sur mesure pour propulser votre entreprise vers le succès." }}
+        {% trans "Nous concevons des solutions numériques sur mesure pour propulser votre entreprise vers le succès." as hero_desc_default %}
+        {{ hero.description|default:company.company_description|default:hero_desc_default }}
       </p>
       <div class="hero-actions animate delay-3">
+        {% trans "Découvrir nos services" as cta_default %}
         <a href="{{ hero.cta_link|default:'/services/' }}" class="btn btn-primary">
-          {{ hero.cta_text|default:"Découvrir nos services" }} <i class="ri-arrow-right-line"></i>
+          {{ hero.cta_text|default:cta_default }} <i class="ri-arrow-right-line"></i>
         </a>
-        <a href="/contact/" class="btn btn-ghost">Nous contacter</a>
+        <a href="/contact/" class="btn btn-ghost">{% trans "Nous contacter" %}</a>
       </div>
     </div>
     <div class="hero-visual animate delay-2">
       <div class="hero-card">
         <img src="{% static 'images/logo.png' %}" alt="Minimum Tech" class="hero-card-logo">
         <h3>Minimum Tech</h3>
-        <p>Data • AI and ML • Développement • Recherche</p>
+        <p>{% trans "Data • AI and ML • Développement • Recherche" %}</p>
         <div class="tech-stack">
           <span class="tech-tag">Power BI</span>
           <span class="tech-tag">SQL</span>
@@ -52,7 +54,7 @@
 
 <section class="trust-band">
   <div class="container">
-    <p class="trust-label">Nos technologies</p>
+    <p class="trust-label">{% trans "Nos technologies" %}</p>
     <div class="trust-logos">
       <span>Power BI</span>
       <span>SQL</span>
@@ -68,9 +70,9 @@
 <section class="section">
   <div class="container">
     <div class="section-header">
-      <div class="section-label"><i class="ri-service-line"></i> Nos Services</div>
-      <h2 class="section-title">Des solutions sur mesure</h2>
-      <p class="section-desc">Des prestations complètes pour répondre à tous vos besoins technologiques</p>
+      <div class="section-label"><i class="ri-service-line"></i> {% trans "Nos Services" %}</div>
+      <h2 class="section-title">{% trans "Des solutions sur mesure" %}</h2>
+      <p class="section-desc">{% trans "Des prestations complètes pour répondre à tous vos besoins technologiques" %}</p>
     </div>
     <div class="card-grid">
       {% for service in services %}
@@ -84,13 +86,13 @@
         <span class="tag" style="margin-bottom:12px;display:inline-block">{{ service.category_display }}</span>
         <h3>{{ service.title }}</h3>
         <p>{{ service.description }}</p>
-        <a href="/services/{{ service.pk }}/" class="card-link">En savoir plus <i class="ri-arrow-right-line"></i></a>
+        <a href="/services/{{ service.pk }}/" class="card-link">{% trans "En savoir plus" %} <i class="ri-arrow-right-line"></i></a>
       </div>
       {% endfor %}
     </div>
     {% if services %}
     <div style="text-align:center;margin-top:48px">
-      <a href="/services/" class="btn btn-outline">Voir tous les services <i class="ri-arrow-right-line"></i></a>
+      <a href="/services/" class="btn btn-outline">{% trans "Voir tous les services" %} <i class="ri-arrow-right-line"></i></a>
     </div>
     {% endif %}
   </div>
@@ -101,17 +103,17 @@
   <div class="container">
     <div class="research-grid">
       <div class="research-header">
-        <div class="section-label"><i class="ri-microscope-line"></i> Recherche</div>
+        <div class="section-label"><i class="ri-microscope-line"></i> {% trans "Recherche" %}</div>
         <h2>{{ research.title }}</h2>
         {% if research.subtitle %}<p>{{ research.subtitle }}</p>{% endif %}
       </div>
       <div>
         <div class="research-card animate delay-1">
-          <div class="research-card-label"><i class="ri-pulse-line"></i> État actuel</div>
+          <div class="research-card-label"><i class="ri-pulse-line"></i> {% trans "État actuel" %}</div>
           <p>{{ research.current_state|truncatewords:20 }}</p>
         </div>
         <a href="/recherche/" class="btn btn-primary" style="margin-top:20px">
-          En savoir plus <i class="ri-arrow-right-line"></i>
+          {% trans "En savoir plus" %} <i class="ri-arrow-right-line"></i>
         </a>
       </div>
     </div>
@@ -122,9 +124,9 @@
 <section class="section">
   <div class="container">
     <div class="section-header">
-      <div class="section-label"><i class="ri-trophy-line"></i> Réalisations</div>
-      <h2 class="section-title">Nos projets</h2>
-      <p class="section-desc">Découvrez les projets que nous avons menés à bien</p>
+      <div class="section-label"><i class="ri-trophy-line"></i> {% trans "Réalisations" %}</div>
+      <h2 class="section-title">{% trans "Nos projets" %}</h2>
+      <p class="section-desc">{% trans "Découvrez les projets que nous avons menés à bien" %}</p>
     </div>
     <div class="card-grid">
       {% for project in realisations %}
@@ -143,14 +145,14 @@
         </div>
         {% endif %}
         {% if project.link %}
-        <a href="{{ project.link }}" target="_blank" rel="noopener" class="card-link">Voir le projet <i class="ri-arrow-right-line"></i></a>
+        <a href="{{ project.link }}" target="_blank" rel="noopener" class="card-link">{% trans "Voir le projet" %} <i class="ri-arrow-right-line"></i></a>
         {% endif %}
       </div>
       {% endfor %}
     </div>
     {% if realisations %}
     <div style="text-align:center;margin-top:48px">
-      <a href="/realisations/?cat=realisation" class="btn btn-outline">Toutes les réalisations <i class="ri-arrow-right-line"></i></a>
+      <a href="/realisations/?cat=realisation" class="btn btn-outline">{% trans "Toutes les réalisations" %} <i class="ri-arrow-right-line"></i></a>
     </div>
     {% endif %}
   </div>
@@ -160,9 +162,9 @@
 <section class="section">
   <div class="container">
     <div class="section-header">
-      <div class="section-label"><i class="ri-hand-heart-line"></i> Collaborations</div>
-      <h2 class="section-title">Partenariats & collaborations</h2>
-      <p class="section-desc">Les projets que nous menons avec nos partenaires</p>
+      <div class="section-label"><i class="ri-hand-heart-line"></i> {% trans "Collaborations" %}</div>
+      <h2 class="section-title">{% trans "Partenariats & collaborations" %}</h2>
+      <p class="section-desc">{% trans "Les projets que nous menons avec nos partenaires" %}</p>
     </div>
     <div class="card-grid">
       {% for project in colabs %}
@@ -181,13 +183,13 @@
         </div>
         {% endif %}
         {% if project.link %}
-        <a href="{{ project.link }}" target="_blank" rel="noopener" class="card-link">Voir le projet <i class="ri-arrow-right-line"></i></a>
+        <a href="{{ project.link }}" target="_blank" rel="noopener" class="card-link">{% trans "Voir le projet" %} <i class="ri-arrow-right-line"></i></a>
         {% endif %}
       </div>
       {% endfor %}
     </div>
     <div style="text-align:center;margin-top:48px">
-      <a href="/realisations/?cat=partenariat" class="btn btn-outline">Voir les collaborations <i class="ri-arrow-right-line"></i></a>
+      <a href="/realisations/?cat=partenariat" class="btn btn-outline">{% trans "Voir les collaborations" %} <i class="ri-arrow-right-line"></i></a>
     </div>
   </div>
 </section>
@@ -196,24 +198,24 @@
 <section class="section pillars-section">
   <div class="container">
     <div class="section-header" style="text-align:left">
-      <div class="section-label"><i class="ri-award-line"></i> Pourquoi Minimum Tech</div>
-      <h2 class="section-title">Plus qu'une entreprise,<br>une vocation.</h2>
+      <div class="section-label"><i class="ri-award-line"></i> {% trans "Pourquoi Minimum Tech" %}</div>
+      <h2 class="section-title">{% trans "Plus qu'une entreprise,<br>une vocation." %}</h2>
     </div>
     <div class="pillars-grid">
       <div class="pillar animate delay-1">
         <span class="pillar-num">01</span>
-        <h3>Un écosystème technologique</h3>
-        <p>Nous œuvrons à bâtir un écosystème technologique local : startups, talents et institutions réunis autour d'une même ambition — faire du Senegal un acteur de l'innovation numérique en Afrique.</p>
+        <h3>{% trans "Un écosystème technologique" %}</h3>
+        <p>{% trans "Nous œuvrons à bâtir un écosystème technologique local : startups, talents et institutions réunis autour d'une même ambition — faire du Senegal un acteur de l'innovation numérique en Afrique." %}</p>
       </div>
       <div class="pillar animate delay-2">
         <span class="pillar-num">02</span>
-        <h3>Recherche en IA &amp; robotique</h3>
-        <p>Nous investissons dans la recherche appliquée en intelligence artificielle et en robotique, pour concevoir des solutions de demain dès aujourd'hui et rester à la pointe de l'innovation.</p>
+        <h3>{% trans "Recherche en IA &amp; robotique" %}</h3>
+        <p>{% trans "Nous investissons dans la recherche appliquée en intelligence artificielle et en robotique, pour concevoir des solutions de demain dès aujourd'hui et rester à la pointe de l'innovation." %}</p>
       </div>
       <div class="pillar animate delay-3">
         <span class="pillar-num">03</span>
-        <h3>Un impact concret</h3>
-        <p>Données, développement web, formations : chaque projet que nous menons traduit cette vision en résultats mesurables pour nos clients et notre communauté.</p>
+        <h3>{% trans "Un impact concret" %}</h3>
+        <p>{% trans "Données, développement web, formations : chaque projet que nous menons traduit cette vision en résultats mesurables pour nos clients et notre communauté." %}</p>
       </div>
     </div>
   </div>
@@ -223,9 +225,9 @@
   <div class="container">
     <div class="cta-section">
       <div class="cta-box">
-        <h2>Prêt à démarrer votre projet ?</h2>
-        <p>Contactez-nous pour discuter de vos besoins et obtenir une solution sur mesure.</p>
-        <a href="/contact/" class="btn">Démarrer un projet <i class="ri-arrow-right-line"></i></a>
+        <h2>{% trans "Prêt à démarrer votre projet ?" %}</h2>
+        <p>{% trans "Contactez-nous pour discuter de vos besoins et obtenir une solution sur mesure." %}</p>
+        <a href="/contact/" class="btn">{% trans "Démarrer un projet" %} <i class="ri-arrow-right-line"></i></a>
       </div>
     </div>
   </div>
