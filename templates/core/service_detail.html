@@ -1,34 +1,34 @@
 {% extends 'base.html' %}
 {% load split_tags i18n %}
-{% block title %}{{ service.title }} — Minimum Tech{% endblock %}
+{% block title %}{{ service.display_title }} — Minimum Tech{% endblock %}
 {% block content %}
 <div class="mesh-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
 <div class="page-hero">
   {% if service.category_display %}<span class="tag" style="margin-bottom:16px;display:inline-block">{{ service.category_display }}</span>{% endif %}
-  <h1>{{ service.title }}</h1>
+  <h1>{{ service.display_title }}</h1>
 </div>
 <div class="blog-content">
   {% if service.image %}
-  <img src="{{ service.image.url }}" alt="{{ service.title }}" style="width:100%;border-radius:16px;margin-bottom:32px;max-height:420px;object-fit:cover">
+  <img src="{{ service.image.url }}" alt="{{ service.display_title }}" style="width:100%;border-radius:16px;margin-bottom:32px;max-height:420px;object-fit:cover">
   {% endif %}
   <div class="blog-article">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
       <div class="card-icon" style="margin:0"><i class="{{ service.icon }}"></i></div>
-      <h2 style="margin:0;font-size:1.4rem">{{ service.title }}</h2>
+      <h2 style="margin:0;font-size:1.4rem">{{ service.display_title }}</h2>
     </div>
     <div style="margin-bottom:28px">
       <h3 style="display:flex;align-items:center;gap:8px;font-size:1.1rem;margin-bottom:12px"><i class="ri-file-text-line" style="color:var(--c-primary)"></i> {% trans "Description" %}</h3>
-      <div class="content">{{ service.description|linebreaks }}</div>
+      <div class="content">{{ service.display_description|linebreaks }}</div>
     </div>
-    {% if service.objective %}
+    {% if service.display_objective %}
     <div>
       <h3 style="display:flex;align-items:center;gap:8px;font-size:1.1rem;margin-bottom:12px"><i class="ri-target-line" style="color:var(--c-primary)"></i> {% trans "Objectif" %}</h3>
-      <div class="content">{{ service.objective|linebreaks }}</div>
+      <div class="content">{{ service.display_objective|linebreaks }}</div>
     </div>
     {% endif %}
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:32px;align-items:center">
-    <a href="/contact/?service={{ service.title|urlencode }}" class="btn btn-primary"><i class="ri-message-3-line"></i> {% trans "Nous contacter" %}</a>
+    <a href="/contact/?service={{ service.display_title|urlencode }}" class="btn btn-primary"><i class="ri-message-3-line"></i> {% trans "Nous contacter" %}</a>
     {% if service.link %}
     <a href="{{ service.link }}" target="_blank" rel="noopener" class="btn btn-outline"><i class="ri-external-link-line"></i> {% trans "Voir plus en détail" %}</a>
     {% endif %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import get_language
 
 
 class Category(models.Model):
@@ -7,6 +8,7 @@ class Category(models.Model):
         ('project', 'Réalisation'),
     ]
     name = models.CharField(max_length=100)
+    name_en = models.CharField(max_length=100, blank=True, null=True, verbose_name='Name (EN)')
     slug = models.SlugField(max_length=100, unique=True)
     category_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='service')
     display_order = models.IntegerField(default=0)
@@ -19,11 +21,20 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.name} ({self.get_category_type_display()})"
 
+    @property
+    def display_name(self):
+        if get_language() == 'en' and self.name_en:
+            return self.name_en
+        return self.name
+
 
 class Service(models.Model):
     title = models.CharField(max_length=200)
+    title_en = models.CharField(max_length=200, blank=True, null=True, verbose_name='Title (EN)')
     description = models.TextField()
+    description_en = models.TextField(blank=True, null=True, verbose_name='Description (EN)')
     objective = models.TextField(blank=True, null=True)
+    objective_en = models.TextField(blank=True, null=True, verbose_name='Objective (EN)')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='services')
     icon = models.CharField(max_length=50, default='ri-briefcase-line')
     link = models.URLField(blank=True, null=True)
@@ -40,8 +51,26 @@ class Service(models.Model):
         return self.title
 
     @property
+    def display_title(self):
+        if get_language() == 'en' and self.title_en:
+            return self.title_en
+        return self.title
+
+    @property
+    def display_description(self):
+        if get_language() == 'en' and self.description_en:
+            return self.description_en
+        return self.description
+
+    @property
+    def display_objective(self):
+        if get_language() == 'en' and self.objective_en:
+            return self.objective_en
+        return self.objective
+
+    @property
     def category_display(self):
-        return self.category.name if self.category else ''
+        return self.category.display_name if self.category else ''
 
 
 class Project(models.Model):
@@ -64,11 +93,11 @@ class Project(models.Model):
 
     @property
     def category_display(self):
-        return self.category.name if self.category else ''
+        return self.category.display_name if self.category else ''
 
     @property
     def service_category_display(self):
-        return self.service_category.name if self.service_category else ''
+        return self.service_category.display_name if self.service_category else ''
 
 
 class FutureProject(models.Model):
@@ -132,15 +161,43 @@ class BlogPost(models.Model):
 
 class Hero(models.Model):
     title = models.CharField(max_length=200)
+    title_en = models.CharField(max_length=200, blank=True, null=True, verbose_name='Title (EN)')
     subtitle = models.CharField(max_length=300, blank=True, null=True)
+    subtitle_en = models.CharField(max_length=300, blank=True, null=True, verbose_name='Subtitle (EN)')
     description = models.TextField(blank=True, null=True)
+    description_en = models.TextField(blank=True, null=True, verbose_name='Description (EN)')
     cta_text = models.CharField(max_length=100, default='Découvrir')
+    cta_text_en = models.CharField(max_length=100, blank=True, null=True, verbose_name='CTA (EN)')
     cta_link = models.CharField(max_length=200, default='/services')
     background_image = models.ImageField(upload_to='hero/', blank=True, null=True)
     active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
+
+    @property
+    def display_title(self):
+        if get_language() == 'en' and self.title_en:
+            return self.title_en
+        return self.title
+
+    @property
+    def display_subtitle(self):
+        if get_language() == 'en' and self.subtitle_en:
+            return self.subtitle_en
+        return self.subtitle
+
+    @property
+    def display_description(self):
+        if get_language() == 'en' and self.description_en:
+            return self.description_en
+        return self.description
+
+    @property
+    def display_cta_text(self):
+        if get_language() == 'en' and self.cta_text_en:
+            return self.cta_text_en
+        return self.cta_text
 
 
 class CompanyInfo(models.Model):

@@ -36,7 +36,7 @@
             <td>{% if c.active %}✅{% else %}❌{% endif %}</td>
             <td>
               <div class="admin-actions">
-                <button class="btn btn-sm btn-ghost" onclick="editCategory({{ c.id }},'{{ c.name|escapejs }}','{{ c.slug|escapejs }}','{{ c.category_type }}',{{ c.display_order }},{% if c.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
+                <button class="btn btn-sm btn-ghost" onclick="editCategory({{ c.id }},'{{ c.name|escapejs }}','{{ c.name_en|default:''|escapejs }}','{{ c.slug|escapejs }}','{{ c.category_type }}',{{ c.display_order }},{% if c.active %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
                 <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ c.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer cette catégorie ?')"><i class="ri-delete-bin-line"></i></button></form>
               </div>
             </td>
@@ -55,6 +55,7 @@
           <div class="modal-body">
             <input type="hidden" name="action" value="create">
             <div class="form-group"><label>Nom</label><input type="text" name="name" required placeholder="Ex: Data & Analyse"></div>
+            <div class="form-group"><label>Nom (EN)</label><input type="text" name="name_en" placeholder="Ex: Data & Analytics"></div>
             <div class="form-group"><label>Slug (URL)</label><input type="text" name="slug" required placeholder="Ex: data"></div>
             <div class="form-group"><label>Type</label>
               <select name="category_type">
@@ -77,6 +78,7 @@
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="id" id="edit_id">
             <div class="form-group"><label>Nom</label><input type="text" name="name" id="edit_name" required></div>
+            <div class="form-group"><label>Nom (EN)</label><input type="text" name="name_en" id="edit_name_en"></div>
             <div class="form-group"><label>Slug (URL)</label><input type="text" name="slug" id="edit_slug" required></div>
             <div class="form-group"><label>Type</label>
               <select name="category_type" id="edit_type">
@@ -94,9 +96,10 @@
   </main>
 </div>
 <script>
-function editCategory(id,name,slug,type,order,active){
+function editCategory(id,name,name_en,slug,type,order,active){
   document.getElementById('edit_id').value=id;
   document.getElementById('edit_name').value=name;
+  document.getElementById('edit_name_en').value=name_en;
   document.getElementById('edit_slug').value=slug;
   document.getElementById('edit_type').value=type;
   document.getElementById('edit_order').value=order;

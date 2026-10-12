@@ -12,7 +12,7 @@
     <div class="cat-filter">
       <a href="/realisations/" class="{% if not current_category %}active{% endif %}">{% trans "Toutes" %}</a>
       {% for cat in categories %}
-      <a href="/realisations/?cat={{ cat.slug }}" class="{% if current_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+      <a href="/realisations/?cat={{ cat.slug }}" class="{% if current_category == cat.slug %}active{% endif %}">{{ cat.display_name }}</a>
       {% endfor %}
     </div>
     <div class="card-grid">

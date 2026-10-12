@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.cache import cache
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import slugify
 from .models import Category, Service, Project, FutureProject, ResearchProject, BlogPost, Hero, CompanyInfo, ContactMessage
 
 MAX_LOGIN_ATTEMPTS = 3
@@ -171,8 +172,11 @@ def admin_services(request):
         if action == 'create':
             Service.objects.create(
                 title=request.POST['title'],
+                title_en=request.POST.get('title_en', ''),
                 description=request.POST['description'],
+                description_en=request.POST.get('description_en', ''),
                 objective=request.POST.get('objective', ''),
+                objective_en=request.POST.get('objective_en', ''),
                 category_id=request.POST.get('category') or None,
                 icon=request.POST.get('icon', 'ri-briefcase-line'),
                 link=request.POST.get('link', ''),
@@ -184,8 +188,11 @@ def admin_services(request):
         elif action == 'update':
             s = Service.objects.get(id=request.POST['id'])
             s.title = request.POST['title']
+            s.title_en = request.POST.get('title_en', '')
             s.description = request.POST['description']
+            s.description_en = request.POST.get('description_en', '')
             s.objective = request.POST.get('objective', '')
+            s.objective_en = request.POST.get('objective_en', '')
             s.category_id = request.POST.get('category') or None
             s.icon = request.POST.get('icon', 'ri-briefcase-line')
             s.link = request.POST.get('link', '')
@@ -357,9 +364,13 @@ def admin_hero(request):
                 Hero.objects.update(active=False)
             Hero.objects.create(
                 title=request.POST['title'],
+                title_en=request.POST.get('title_en', ''),
                 subtitle=request.POST.get('subtitle', ''),
+                subtitle_en=request.POST.get('subtitle_en', ''),
                 description=request.POST.get('description', ''),
+                description_en=request.POST.get('description_en', ''),
                 cta_text=request.POST.get('cta_text', 'Découvrir'),
+                cta_text_en=request.POST.get('cta_text_en', ''),
                 cta_link=request.POST.get('cta_link', '/services'),
                 background_image=request.FILES.get('background_image'),
                 active='active' in request.POST,
@@ -369,9 +380,13 @@ def admin_hero(request):
             if request.POST.get('active') and not h.active:
                 Hero.objects.update(active=False)
             h.title = request.POST['title']
+            h.title_en = request.POST.get('title_en', '')
             h.subtitle = request.POST.get('subtitle', '')
+            h.subtitle_en = request.POST.get('subtitle_en', '')
             h.description = request.POST.get('description', '')
+            h.description_en = request.POST.get('description_en', '')
             h.cta_text = request.POST.get('cta_text', 'Découvrir')
+            h.cta_text_en = request.POST.get('cta_text_en', '')
             h.cta_link = request.POST.get('cta_link', '/services')
             if request.FILES.get('background_image'):
                 h.background_image = request.FILES['background_image']
@@ -410,10 +425,12 @@ def admin_messages(request):
 def admin_categories(request):
     if request.method == 'POST':
         action = request.POST.get('action')
+        slug = slugify(request.POST['slug'])
         if action == 'create':
             Category.objects.create(
                 name=request.POST['name'],
-                slug=request.POST['slug'],
+                name_en=request.POST.get('name_en', ''),
+                slug=slug,
                 category_type=request.POST.get('category_type', 'service'),
                 display_order=int(request.POST.get('display_order', 0)),
             )
@@ -421,7 +438,8 @@ def admin_categories(request):
         elif action == 'update':
             c = Category.objects.get(id=request.POST['id'])
             c.name = request.POST['name']
-            c.slug = request.POST['slug']
+            c.name_en = request.POST.get('name_en', '')
+            c.slug = slug
             c.category_type = request.POST.get('category_type', 'service')
             c.display_order = int(request.POST.get('display_order', 0))
             c.active = 'active' in request.POST

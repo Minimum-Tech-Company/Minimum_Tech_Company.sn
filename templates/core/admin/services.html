@@ -39,7 +39,7 @@
             <td>{% if s.active %}✅{% else %}❌{% endif %}</td>
             <td>
               <div class="admin-actions">
-                <button class="btn btn-sm btn-ghost" onclick="editService({{ s.id }},'{{ s.title|escapejs }}','{{ s.description|escapejs }}','{{ s.objective|default:''|escapejs }}',{{ s.category_id|default:'null' }},'{{ s.icon }}','{{ s.link|default:'' }}',{{ s.display_order }},{% if s.active %}1{% else %}0{% endif %},{% if s.featured %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
+                <button class="btn btn-sm btn-ghost" onclick="editService({{ s.id }},'{{ s.title|escapejs }}','{{ s.description|escapejs }}','{{ s.objective|default:''|escapejs }}','{{ s.title_en|default:''|escapejs }}','{{ s.description_en|default:''|escapejs }}','{{ s.objective_en|default:''|escapejs }}',{{ s.category_id|default:'null' }},'{{ s.icon }}','{{ s.link|default:'' }}',{{ s.display_order }},{% if s.active %}1{% else %}0{% endif %},{% if s.featured %}1{% else %}0{% endif %})"><i class="ri-edit-line"></i></button>
                 <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="{{ s.id }}"><button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Supprimer ?')"><i class="ri-delete-bin-line"></i></button></form>
               </div>
             </td>
@@ -58,9 +58,12 @@
           <div class="modal-body">
             <input type="hidden" name="action" value="create">
             <div class="form-group"><label>Titre</label><input type="text" name="title" required></div>
+            <div class="form-group"><label>Titre (EN)</label><input type="text" name="title_en" placeholder="English title"></div>
             <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
             <div class="form-group"><label>Description</label><textarea name="description" required></textarea></div>
+            <div class="form-group"><label>Description (EN)</label><textarea name="description_en" placeholder="English description"></textarea></div>
             <div class="form-group"><label>Objectif</label><textarea name="objective" placeholder="L'objectif de ce service..."></textarea></div>
+            <div class="form-group"><label>Objectif (EN)</label><textarea name="objective_en" placeholder="English objective"></textarea></div>
             <div class="form-group"><label>Catégorie</label><select name="category">{% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
             <div class="form-group"><label>Icône (RemixIcon)</label><input type="text" name="icon" value="ri-briefcase-line" placeholder="ri-code-line"></div>
             <div class="form-group"><label>Lien externe</label><input type="url" name="link" placeholder="https://..."></div>
@@ -80,9 +83,12 @@
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="id" id="edit_id">
             <div class="form-group"><label>Titre</label><input type="text" name="title" id="edit_title" required></div>
+            <div class="form-group"><label>Titre (EN)</label><input type="text" name="title_en" id="edit_title_en"></div>
             <div class="form-group"><label>Photo de couverture</label><input type="file" name="image" accept="image/*"></div>
             <div class="form-group"><label>Description</label><textarea name="description" id="edit_desc" required></textarea></div>
+            <div class="form-group"><label>Description (EN)</label><textarea name="description_en" id="edit_desc_en"></textarea></div>
             <div class="form-group"><label>Objectif</label><textarea name="objective" id="edit_objective"></textarea></div>
+            <div class="form-group"><label>Objectif (EN)</label><textarea name="objective_en" id="edit_objective_en"></textarea></div>
             <div class="form-group"><label>Catégorie</label><select name="category" id="edit_cat">{% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}</select></div>
             <div class="form-group"><label>Icône</label><input type="text" name="icon" id="edit_icon"></div>
             <div class="form-group"><label>Lien</label><input type="url" name="link" id="edit_link"></div>
@@ -97,11 +103,14 @@
   </main>
 </div>
 <script>
-function editService(id,title,desc,objective,cat,icon,link,order,active,featured){
+function editService(id,title,desc,objective,title_en,desc_en,objective_en,cat,icon,link,order,active,featured){
   document.getElementById('edit_id').value=id;
   document.getElementById('edit_title').value=title;
   document.getElementById('edit_desc').value=desc;
   document.getElementById('edit_objective').value=objective;
+  document.getElementById('edit_title_en').value=title_en;
+  document.getElementById('edit_desc_en').value=desc_en;
+  document.getElementById('edit_objective_en').value=objective_en;
   document.getElementById('edit_cat').value=cat;
   document.getElementById('edit_icon').value=icon;
   document.getElementById('edit_link').value=link;
